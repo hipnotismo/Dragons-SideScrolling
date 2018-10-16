@@ -181,7 +181,7 @@ namespace GameInit
 				}
 				//---------------------------------------------------------
 				//Meteor Movement
-				movMeteor(meteor);
+				//movMeteor(meteor);
 				//---------------------------------------------------------
 				//Bordes pantalla
 				for (int i = 0; i < TOTAL_METEOR; i++)
