@@ -1,6 +1,6 @@
 ![logo](https://github.com/cusumdt/Asteroids-Proyect/blob/master/Asteroids/res/logo.png)
 
-# Proyecto Asteroids <br/> 
+# Dragons Side-Scrolling <br/> 
 
 *Este proyecto es un side-scrolling estilo flappy bird, con estetica de dragones, realizado por* **Cristian Cusumano**<br/> 
 
