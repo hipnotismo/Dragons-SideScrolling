@@ -18,7 +18,7 @@ namespace GameInit
 			float delta_x;
 			static float position_y=0.0f;
 			static int maxPosition_y = 900;
-			static int position_x = 600;
+			static int position_x = 1000;
 			using namespace Gameplay;
 		
 			//player.speed.x = sin(player.rotation*DEG2RAD);
@@ -26,7 +26,8 @@ namespace GameInit
 			{
 				if (position_y > 0)
 				{
-					position_y -= 400.0f;
+					position_y -= 600.0f;
+
 				}
 			}
 			else
@@ -34,8 +35,7 @@ namespace GameInit
 				
 				if (position_y < maxPosition_y)
 				{
-					position_y += 0.5f;
-
+					position_y += 1.0f;
 				}
 			}
 			
@@ -43,16 +43,12 @@ namespace GameInit
 			delta_x = player.destRec.x - position_x;
 			player.rotation = (atan2(delta_y, delta_x)*RAD2DEG)-90;
 			player.speed.x = sin(player.rotation*DEG2RAD);
-			player.speed.y = cos(player.rotation*DEG2RAD);
+			player.speed.y = cos(player.rotation*DEG2RAD)*5;
 			//player.speed.y = cos(player.rotation*DEG2RAD);
 		
 			player.acceleration = 300;
 			//player.position.x += (player.speed.x*player.acceleration)* GetFrameTime();
 			player.position.y -= (player.speed.y*player.acceleration)* GetFrameTime();
-			if (player.position.x > screenWidth + shipHeight) player.position.x = -(shipHeight);
-			else if (player.position.x < -(shipHeight)) player.position.x = screenWidth + shipHeight;
-			if (player.position.y >(screenHeight + shipHeight)) player.position.y = -(shipHeight);
-			else if (player.position.y < -(shipHeight)) player.position.y = screenHeight + shipHeight;
 		}
 	}
 }

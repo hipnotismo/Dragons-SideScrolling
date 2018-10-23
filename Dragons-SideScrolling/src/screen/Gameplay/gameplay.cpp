@@ -111,6 +111,9 @@ namespace GameInit
 		static Shoot shoot[PLAYER_MAX_SHOOTS];
 		static short int points = 0;
 		static bool pause;
+		static const int framesSpeed = 8;
+		int framesCounter = 0;
+		int currentFrame = 0;
 		//--------------------------------------------
 
 		bool left = false;
@@ -128,7 +131,7 @@ namespace GameInit
 			velocity = INIT_VELOCITY;
 			//--------------------------------
 
-			shipHeight = (PLAYER_BASE_SIZE / 2) / tanf(20 * DEG2RAD);
+			shipHeight = (PLAYER_BASE_SIZE / 2) / tanf(20 * DEG2RAD) /2;
 			player.player_texture = LoadTexture("res/Space_Ship.png");
 			player.position = Vector2{ 200.0f, (float)screenHeight / 2 - shipHeight / 2 };
 			player.speed = Vector2{ 0, 0 };
@@ -139,6 +142,7 @@ namespace GameInit
 			player.origin = { (float)player.player_texture.width / 2,(float)player.player_texture.height / 2 };
 			player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(shipHeight / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(shipHeight / 2.5f), 12 };
 			player.color = LIGHTGRAY;
+			player.frameRec = { 0.0f, 0.0f, (float)player.player_texture.width / 2, (float)player.player_texture.height };
 			//--------------------------------
 			initMeteor(meteor);
 			initShoot(shoot);
@@ -159,6 +163,18 @@ namespace GameInit
 
 		void updateGame()
 		{
+			framesCounter+=1;
+
+			if (framesCounter*GetFrameTime() >= (20 / framesSpeed))
+			{
+				framesCounter = 0;
+				currentFrame++;
+
+				if (currentFrame > 1) currentFrame = 0;
+
+				player.frameRec.x = (float)currentFrame*(float)player.player_texture.width / 2;
+			}
+
 			if (!pause)
 			{
 				if (CheckCollisionPointRec(GetMousePosition(), recPause))
@@ -272,7 +288,7 @@ namespace GameInit
 				{
 					meteor[i].destRec = { meteor[i].x,meteor[i].y,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
 				}
-				player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width,(float)player.player_texture.height };
+				player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width/2,(float)player.player_texture.height };
 			}
 			else 
 			{
@@ -319,7 +335,8 @@ namespace GameInit
 			{
 				DrawTexture(negativePause, Gameplay::screenWidth - 100, 5, WHITE);
 			}
-			DrawTexturePro(player.player_texture, player.sourceRec, player.destRec, player.origin, player.rotation, WHITE);
+			//DrawTextureRec(player.player_texture, , player.position, WHITE);
+			DrawTexturePro(player.player_texture, player.frameRec, player.destRec, player.origin, player.rotation, WHITE);
 			drawMeteor(meteor);
 			for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
 			{

@@ -25,6 +25,7 @@ namespace GameInit
 			Color color;
 			Rectangle sourceRec;
 			Rectangle destRec;
+			Rectangle frameRec;
 			Vector2 origin;
 
 		};
