@@ -36,6 +36,7 @@ namespace GameInit
 			Texture2D meteor_texture;
 			float x;
 			float y;
+			float x_inicial;
 			Vector2 position;
 			Vector2 speed;
 			int radius;
@@ -91,7 +92,7 @@ namespace GameInit
 		static const short int MAX_POINT = 5;
 		static const short int HEIGHT_BOX = (screenHeight / 15);
 		static const short int WIDTH_BOX = (screenWidth / 25);
-		static const short int RADIUS_BALL = (screenWidth / 45);
+		static const short int RADIUS_BALL = (150);
 		static const short int SPEED_BALL_INIT = 0;
 		static const short int MOVE_BOX = 400;
 		static const short int INIT_SCORE = 0;
@@ -181,7 +182,7 @@ namespace GameInit
 				}
 				//---------------------------------------------------------
 				//Meteor Movement
-				//movMeteor(meteor);
+				movMeteor(meteor);
 				//---------------------------------------------------------
 				//Bordes pantalla
 				for (int i = 0; i < TOTAL_METEOR; i++)
@@ -353,12 +354,21 @@ namespace GameInit
 			for (int i = 0; i < TOTAL_METEOR; i++)
 			{
 				meteor[i].meteor_texture = LoadTexture("res/meteor.png");
-				meteor[i].x = GetRandomValue(1, screenWidth);
-				meteor[i].y = GetRandomValue(1, screenHeight);
-				while (meteor[i].y>screenHeight / 3 && meteor[i].y<screenHeight - screenHeight / 3)
+				meteor[i].x_inicial= GetRandomValue(screenWidth + RADIUS_BALL, screenWidth * 2) + RADIUS_BALL;
+				if (i == 0)
 				{
-					meteor[i].y = GetRandomValue(1, screenHeight);
+					meteor[i].x = meteor[i].x_inicial;
 				}
+				else 
+				{
+					meteor[i].x = meteor[i].x_inicial + meteor[i].meteor_texture.width;
+				}
+			
+				meteor[i].y = screenHeight - RADIUS_BALL;
+				//while (meteor[i].y>screenHeight / 3 && meteor[i].y<screenHeight - screenHeight / 3)
+				//{
+				//	meteor[i].y = GetRandomValue(1, screenHeight);
+				//}
 				meteor[i].position = Vector2{ meteor[i].x, meteor[i].y };
 				meteor[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
 				meteor[i].radius = RADIUS_BALL;
@@ -456,62 +466,21 @@ namespace GameInit
 		{
 			for (int i = 0; i < TOTAL_METEOR; i++)
 			{
-				switch (meteor[i].dir)
-				{
-				case Up:
-					meteor[i].x -= velocity * GetFrameTime();
-					break;
-				case Right:
-					meteor[i].y += velocity * GetFrameTime();
-					break;
-				case Left:
-					meteor[i].y -= velocity * GetFrameTime();
-					break;
-				case Down:
-					meteor[i].x += velocity * GetFrameTime();
-					break;
-				case UpRight:
-					meteor[i].x -= velocity * GetFrameTime();
-					meteor[i].y += velocity * GetFrameTime();
-					break;
-				case UpLeft:
-					meteor[i].x -= velocity * GetFrameTime();
-					meteor[i].y -= velocity * GetFrameTime();
-					break;
-				case DownRight:
-					meteor[i].x += velocity * GetFrameTime();
-					meteor[i].y += velocity * GetFrameTime();
-					break;
-				case DownLeft:
-					meteor[i].x += velocity * GetFrameTime();
-					meteor[i].y -= velocity * GetFrameTime();
-					break;
-				}
+				meteor[i].x -= velocity * GetFrameTime();
 			}
 		}
 		static void instanceThisMeteor(Meteor meteor[], int thisMeteor)
 		{
-			Limits limit = (Limits)GetRandomValue(1, 4);
-			switch (limit)
+			meteor[thisMeteor].x_inicial = GetRandomValue(screenWidth + RADIUS_BALL, screenWidth * 2) + RADIUS_BALL;
+			if (thisMeteor == 0)
 			{
-			case LimitTop:
-				meteor[thisMeteor].x = GetRandomValue(-RADIUS_BALL, screenWidth + RADIUS_BALL);
-				meteor[thisMeteor].y = -RADIUS_BALL;
-				break;
-			case LimitDown:
-				meteor[thisMeteor].x = GetRandomValue(-RADIUS_BALL, screenWidth + RADIUS_BALL);
-				meteor[thisMeteor].y = screenHeight + RADIUS_BALL;
-				break;
-			case LimitRight:
-				meteor[thisMeteor].x = screenWidth + RADIUS_BALL;
-				meteor[thisMeteor].y = GetRandomValue(-RADIUS_BALL, screenHeight + RADIUS_BALL);
-				break;
-			case LimitLeft:
-				meteor[thisMeteor].x = -RADIUS_BALL;
-				meteor[thisMeteor].y = GetRandomValue(-RADIUS_BALL, screenHeight + RADIUS_BALL);
-				break;
+				meteor[thisMeteor].x = meteor[thisMeteor].x_inicial;
 			}
-			meteor[thisMeteor].dir = (Direction)GetRandomValue(1, 8);
+			else
+			{
+				meteor[thisMeteor].x = meteor[thisMeteor].x_inicial + meteor[thisMeteor].meteor_texture.width;
+				//meteor[thisMeteor].x = meteor[thisMeteor].x_inicial + meteor[thisMeteor - 1].x_inicial/3 + meteor[thisMeteor].meteor_texture.width;
+			}
 		}
 		static void initShoot(Shoot shoot[])
 		{
