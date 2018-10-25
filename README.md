@@ -1,4 +1,4 @@
-![logo](https://github.com/cusumdt/Asteroids-Proyect/blob/master/Asteroids/res/logo.png)
+![logo](https://github.com/cusumdt/Dragons-SideScrolling/blob/master/Dragons-SideScrolling/res/logo.png)
 
 # Dragons Side-Scrolling <br/> 
 
