@@ -83,6 +83,7 @@ namespace GameInit
 		//-------------------------------------------- Statics
 		int screenWidth = 600;
 		int screenHeight = 800;
+		float time = 0;
 		static int checkGame = 1;
 		static const int TOTAL_METEOR = 10;
 		static Rectangle box2;
@@ -133,16 +134,16 @@ namespace GameInit
 
 			shipHeight = (PLAYER_BASE_SIZE / 2) / tanf(20 * DEG2RAD) /2;
 			player.player_texture = LoadTexture("res/Space_Ship.png");
-			player.position = Vector2{ 200.0f, (float)screenHeight / 2 - shipHeight / 2 };
+			player.position = Vector2{ 200.0f, (float)screenHeight / 3 - shipHeight / 3 };
 			player.speed = Vector2{ 0, 0 };
 			player.acceleration = 0;
 			player.rotation = 0;
 			player.sourceRec = { 0.0f,0.0f,(float)player.player_texture.width,(float)player.player_texture.height };
 			player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width,(float)player.player_texture.height };
-			player.origin = { (float)player.player_texture.width / 2,(float)player.player_texture.height / 2 };
+			player.origin = { (float)player.player_texture.width / 3,(float)player.player_texture.height / 3 };
 			player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(shipHeight / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(shipHeight / 2.5f), 12 };
 			player.color = LIGHTGRAY;
-			player.frameRec = { 0.0f, 0.0f, (float)player.player_texture.width / 2, (float)player.player_texture.height };
+			player.frameRec = { 0.0f, 0.0f, (float)player.player_texture.width / 3, (float)player.player_texture.height };
 			//--------------------------------
 			initMeteor(meteor);
 			initShoot(shoot);
@@ -163,17 +164,7 @@ namespace GameInit
 
 		void updateGame()
 		{
-			framesCounter+=1;
-
-			if (framesCounter*GetFrameTime() >= (20 / framesSpeed))
-			{
-				framesCounter = 0;
-				currentFrame++;
-
-				if (currentFrame > 1) currentFrame = 0;
-
-				player.frameRec.x = (float)currentFrame*(float)player.player_texture.width / 2;
-			}
+			
 
 			if (!pause)
 			{
@@ -222,17 +213,33 @@ namespace GameInit
 				//-------------------------------------------------------
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 				{
-					for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
+					
+					framesCounter += 1;
+
+					if (framesCounter*GetFrameTime() >= (1 / framesSpeed))
 					{
-						if (!shoot[i].active)
+						currentFrame++;
+
+						if (currentFrame > 1) currentFrame = 1;
+
+						player.frameRec.x = (float)currentFrame*(float)player.player_texture.width / 3;
+					}
+					
+				}
+				else
+				{
+					time+=1*GetFrameTime();
+					if (time>0.5f) {
+						time = 0;
+						if (framesCounter*GetFrameTime() >= (1 / framesSpeed))
 						{
-							shoot[i].position = Vector2{ player.position.x + sin(player.rotation*DEG2RAD)*(shipHeight), player.position.y - cos(player.rotation*DEG2RAD)*(shipHeight) };
-							shoot[i].active = true;
-							shoot[i].speed.x = 1.5*sin(player.rotation*DEG2RAD)*PLAYER_SPEED;
-							shoot[i].speed.y = 1.5*cos(player.rotation*DEG2RAD)*PLAYER_SPEED;
-							shoot[i].rotation = player.rotation;
+							framesCounter = 0;
+							currentFrame = 0;
+							player.frameRec.x = (float)currentFrame*(float)player.player_texture.width / 3;
 						}
 					}
+					
+				
 				}
 
 				// Shoot life timer
