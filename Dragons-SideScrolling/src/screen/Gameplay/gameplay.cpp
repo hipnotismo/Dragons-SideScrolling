@@ -127,7 +127,10 @@ namespace GameInit
 		int currentFrame = 0;
 		Rectangle enemi;
 		Rectangle enemi2;
+		Rectangle pisoenemi;
+		Rectangle piso2;
 		Fondo fondo[2];
+		Fondo piso[2];
 		Rectangle rec;
 
 		//--------------------------------------------
@@ -154,6 +157,25 @@ namespace GameInit
 					fondo[i].y = 0;
 					fondo[i].position = Vector2{ 0.0f,0.0f };
 					fondo[i].speed = Vector2{ 0, 0 };
+				}
+			}
+			for (int i = 0; i < 2; i++)
+			{
+				if (i == 0)
+				{
+					piso[i].fond = LoadTexture("res/piso.png");
+					piso[i].x = 0;
+					piso[i].y = screenHeight-piso[i].fond.height;
+					piso[i].position = Vector2{ 0.0f,0.0f };
+					piso[i].speed = Vector2{ 0, 0 };
+				}
+				else
+				{
+					piso[i].fond = LoadTexture("res/piso.png");
+					piso[i].x = fondo[i].fond.width;
+					piso[i].y = screenHeight - piso[i].fond.height;;
+					piso[i].position = Vector2{ 0.0f,0.0f };
+					piso[i].speed = Vector2{ 0, 0 };
 				}
 			}
 		
@@ -206,14 +228,70 @@ namespace GameInit
 			}
 			for (int i = 0; i <2; i++)
 			{
-				fondo[i].x -= velocity * GetFrameTime();
+				fondo[i].x -= velocity /4 * GetFrameTime();
 				if (fondo[i].x <= -fondo[i].fond.width)
 				{
 					fondo[i].x = (int)fondo[i].fond.width;
 				}
 			}
-			
+			for (int i = 0; i < 2; i++)
+			{
 
+				piso[i].position = Vector2{ piso[i].x,piso[i].y };
+				piso[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
+			}
+			for (int i = 0; i <2; i++)
+			{
+				piso[i].x -= velocity * GetFrameTime();
+				if (piso[i].x <= -piso[i].fond.width)
+				{
+					piso[i].x = (int)piso[i].fond.width;
+				}
+			}
+			
+			//---------------------------------------------- Colision piso
+			for (int i = 0; i < TOTAL_METEOR; i++)
+			{
+				if (i == 1)
+				{
+					pisoenemi = { (float)piso[i].x - (float)piso[i].fond.width / 2,(float)piso[i].y - (float)piso[i].fond.height / 2+50,(float)piso[i].fond.width,(float)piso[i].fond.height };
+				}
+				else
+				{
+					piso2 = { (float)piso[i].x - (float)piso[i].fond.width / 2,(float)piso[i].y - (float)piso[i].fond.height / 2 +50,(float)piso[i].fond.width,(float)piso[i].fond.height };
+				}
+			}
+			for (int i = 0; i < 2; i++)
+			{
+				player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(shipHeight / 3 / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(shipHeight / 3 / 2.5f), 12 };
+
+				//	if (CheckCollisionCircleRec(Vector2{ player.collider.x, player.collider.y }, player.collider.z,enemi))
+				if (CheckCollisionRecs(rec, pisoenemi) || CheckCollisionRecs(rec, piso2))
+				{
+#ifdef MUSIC_ON
+					if (music)
+					{
+						randomMusic = GetRandomValue(1, 4);
+						switch (randomMusic) {
+						case 1:
+							PlaySound(fxWav);
+							break;
+						case 2:
+							PlaySound(fxWav2);
+							break;
+						case 3:
+							PlaySound(fxWav3);
+							break;
+						case 4:
+							PlaySound(fxWav4);
+							break;
+						}
+					}
+#endif
+					defeat();
+				}
+
+			}
 			for (int i = 0; i < TOTAL_METEOR; i++) 
 			{	
 				if (i == 1) 
@@ -414,6 +492,11 @@ namespace GameInit
 			}
 
 			DrawText(FormatText("%01i", points), (screenWidth / 2) - 20, screenHeight / 20, 30, LIGHTGRAY);
+			for (int i = 0; i < 2; i++)
+			{
+				DrawTexture(piso[i].fond, piso[i].position.x, piso[i].position.y, WHITE);
+			}
+
 			if (pause) 
 			{
 				DrawTexture(fond_black, 0, 0, WHITE);
@@ -505,47 +588,6 @@ namespace GameInit
 		}
 		static void checkColisionMeteor(Meteor meteor[])
 		{
-			//Colision bala-meteoro
-			for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
-			{
-				if ((shoot[i].active))
-				{
-					for (int a = 0; a < TOTAL_METEOR; a++)
-					{
-						if (meteor[a].active && CheckCollisionCircles(shoot[i].position, shoot[i].radius, meteor[a].position, meteor[a].radius))
-						{
-							for (int x = 0; x < PLAYER_MAX_SHOOTS; x++)
-							{
-								shoot[x].active = false;
-							}
-							i = PLAYER_MAX_SHOOTS;
-							points++;
-							shoot[i].lifeSpawn = 0;
-							instanceThisMeteor(meteor, a);
-#ifdef MUSIC_ON
-							if (music)
-							{
-								randomMusic = GetRandomValue(1, 4);
-								switch (randomMusic) {
-								case 1:
-									PlaySound(fxWav);
-									break;
-								case 2:
-									PlaySound(fxWav2);
-									break;
-								case 3:
-									PlaySound(fxWav3);
-									break;
-								case 4:
-									PlaySound(fxWav4);
-									break;
-								}
-							}
-#endif
-						}
-					}
-				}
-			}
 			//---------------------------------------------------------
 			//Colision meteoro-player
 			for (int i = 0; i < TOTAL_METEOR; i++)
@@ -626,7 +668,7 @@ namespace GameInit
 				screen = WIN;
 				initMeteor(meteor);
 				points = INIT_SCORE;
-				player.position = Vector2{ (float)screenWidth / 2, (float)screenHeight / 2 - shipHeight / 2 };
+				player.position = Vector2{ 200.0f, (float)screenHeight / 3 - shipHeight / 3 };
 				player.rotation = 0;
 			}
 		}
@@ -635,7 +677,7 @@ namespace GameInit
 			screen = DEFEAT;
 			initMeteor(meteor);
 			points = INIT_SCORE;
-			player.position = Vector2{ (float)screenWidth / 2, (float)screenHeight / 2 - shipHeight / 2 };
+			player.position = Vector2{ 200.0f, (float)screenHeight / 3 - shipHeight / 3 };
 			player.rotation = 0;
 
 		}

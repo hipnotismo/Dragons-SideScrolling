@@ -26,7 +26,7 @@ namespace GameInit
 			{
 				if (position_y > 0)
 				{
-					position_y -= 600.0f;
+					position_y -= 1000000.0f * GetFrameTime();
 
 				}
 			}
@@ -35,7 +35,7 @@ namespace GameInit
 				
 				if (position_y < maxPosition_y)
 				{
-					position_y += 1.0f;
+					position_y += 1000.0f* GetFrameTime();
 				}
 			}
 			
