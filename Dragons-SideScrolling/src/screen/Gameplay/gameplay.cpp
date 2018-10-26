@@ -7,6 +7,8 @@
 #include "raylib.h"
 #include "Game\game.h"
 #include "Logic\mov_ship.h"
+#include <iostream>
+using namespace std;
 
 //#define MUSIC_ON
 namespace GameInit
@@ -85,7 +87,7 @@ namespace GameInit
 		int screenHeight = 800;
 		float time = 0;
 		static int checkGame = 1;
-		static const int TOTAL_METEOR = 10;
+		static const int TOTAL_METEOR = 2;
 		static Rectangle box2;
 		static Meteor meteor[TOTAL_METEOR];
 		static short int INIT_VELOCITY = 400;
@@ -115,6 +117,11 @@ namespace GameInit
 		static const int framesSpeed = 8;
 		int framesCounter = 0;
 		int currentFrame = 0;
+		Rectangle enemi;
+		Rectangle enemi2;
+
+		Rectangle rec;
+
 		//--------------------------------------------
 
 		bool left = false;
@@ -131,7 +138,7 @@ namespace GameInit
 #endif
 			velocity = INIT_VELOCITY;
 			//--------------------------------
-
+			
 			shipHeight = (PLAYER_BASE_SIZE / 2) / tanf(20 * DEG2RAD) /2;
 			player.player_texture = LoadTexture("res/Space_Ship.png");
 			player.position = Vector2{ 200.0f, (float)screenHeight / 3 - shipHeight / 3 };
@@ -141,7 +148,7 @@ namespace GameInit
 			player.sourceRec = { 0.0f,0.0f,(float)player.player_texture.width,(float)player.player_texture.height };
 			player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width,(float)player.player_texture.height };
 			player.origin = { (float)player.player_texture.width / 3,(float)player.player_texture.height / 3 };
-			player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(shipHeight / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(shipHeight / 2.5f), 12 };
+			player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(shipHeight/3 / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(shipHeight/3 / 2.5f), 12 };
 			player.color = LIGHTGRAY;
 			player.frameRec = { 0.0f, 0.0f, (float)player.player_texture.width / 3, (float)player.player_texture.height };
 			//--------------------------------
@@ -164,8 +171,19 @@ namespace GameInit
 
 		void updateGame()
 		{
-			
-
+			for (int i = 0; i < TOTAL_METEOR; i++) 
+			{	
+				if (i == 1) 
+				{
+					enemi = { (float)meteor[i].x - (float)meteor[i].meteor_texture.width / 2,(float)meteor[i].y - (float)meteor[i].meteor_texture.height / 2,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
+				}
+				else 
+				{
+					enemi2 = { (float)meteor[i].x - (float)meteor[i].meteor_texture.width / 2,(float)meteor[i].y - (float)meteor[i].meteor_texture.height / 2,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
+				}
+			}
+		
+			rec = { (float)player.position.x - (float)player.player_texture.width/3/2,(float)player.position.y- (float)player.player_texture.height, (float)player.player_texture.width / 3, (float)player.player_texture.height };
 			if (!pause)
 			{
 				if (CheckCollisionPointRec(GetMousePosition(), recPause))
@@ -194,9 +212,7 @@ namespace GameInit
 				//Bordes pantalla
 				for (int i = 0; i < TOTAL_METEOR; i++)
 				{
-					if (meteor[i].y <= (LIMIT_TOP - RADIUS_BALL * 4) ||
-						meteor[i].y >= (screenHeight + RADIUS_BALL * 4) ||
-						meteor[i].x >= (screenWidth + RADIUS_BALL * 4) ||
+					if (
 						meteor[i].x <= (0 - RADIUS_BALL * 4))
 					{
 						instanceThisMeteor(meteor, i);
@@ -372,35 +388,55 @@ namespace GameInit
 					DrawTexture(negativeExit, Gameplay::screenWidth / 2 - exit.width / 2, Gameplay::screenHeight / 2 + exit.height + 5, WHITE);
 				}
 			}
+			DrawRectangleRec(rec, BLACK);
 		}
 		void initMeteor(Meteor meteor[])
 		{
 			for (int i = 0; i < TOTAL_METEOR; i++)
 			{
-				meteor[i].meteor_texture = LoadTexture("res/meteor.png");
-				meteor[i].x_inicial= GetRandomValue(screenWidth + RADIUS_BALL, screenWidth * 2) + RADIUS_BALL;
-				if (i == 0)
+				if (i == 0) 
 				{
-					meteor[i].x = meteor[i].x_inicial;
+					meteor[i].meteor_texture = LoadTexture("res/meteor.png");
+					meteor[i].x_inicial = GetRandomValue(screenWidth + RADIUS_BALL, screenWidth * 2) + RADIUS_BALL;
+					if (i == 0)
+					{
+						meteor[i].x = meteor[i].x_inicial;
+					}
+					else
+					{
+						meteor[i].x = meteor[i].x_inicial + meteor[i].meteor_texture.width;
+					}
+
+					meteor[i].y = screenHeight - RADIUS_BALL + GetRandomValue(100, 600);
+					cout << meteor[i].y << endl;
+					//while (meteor[i].y>screenHeight / 3 && meteor[i].y<screenHeight - screenHeight / 3)
+					//{
+					//	meteor[i].y = GetRandomValue(1, screenHeight);
+					//}
+					meteor[i].position = Vector2{ meteor[i].x, meteor[i].y };
+					meteor[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
+					meteor[i].radius = RADIUS_BALL;
+					meteor[i].active = true;
+					meteor[i].dir = (Direction)GetRandomValue(1, 8);
+					meteor[i].sourceRec = { 0.0f,0.0f,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
+					meteor[i].destRec = { meteor[i].x,meteor[i].y,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
+					meteor[i].origin = { (float)meteor[i].meteor_texture.width / 2,(float)meteor[i].meteor_texture.height / 2 };
 				}
 				else 
 				{
-					meteor[i].x = meteor[i].x_inicial + meteor[i].meteor_texture.width;
+					meteor[i].meteor_texture = LoadTexture("res/meteor.png");
+					meteor[i].x = meteor[i-1].x;
+					meteor[i].y = meteor[0].y - screenHeight - 400;
+					meteor[i].position = Vector2{ meteor[i].x, meteor[i].y };
+					meteor[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
+					meteor[i].radius = RADIUS_BALL;
+					meteor[i].active = true;
+					meteor[i].dir = (Direction)GetRandomValue(1, 8);
+					meteor[i].sourceRec = { 0.0f,0.0f,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
+					meteor[i].destRec = { meteor[i].x,meteor[i].y,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
+					meteor[i].origin = { (float)meteor[i].meteor_texture.width / 2,(float)meteor[i].meteor_texture.height / 2 };
 				}
-			
-				meteor[i].y = screenHeight - RADIUS_BALL;
-				//while (meteor[i].y>screenHeight / 3 && meteor[i].y<screenHeight - screenHeight / 3)
-				//{
-				//	meteor[i].y = GetRandomValue(1, screenHeight);
-				//}
-				meteor[i].position = Vector2{ meteor[i].x, meteor[i].y };
-				meteor[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
-				meteor[i].radius = RADIUS_BALL;
-				meteor[i].active = true;
-				meteor[i].dir = (Direction)GetRandomValue(1, 8);
-				meteor[i].sourceRec = { 0.0f,0.0f,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
-				meteor[i].destRec = { meteor[i].x,meteor[i].y,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
-				meteor[i].origin = { (float)meteor[i].meteor_texture.width/2,(float)meteor[i].meteor_texture.height/2 };
+				
 
 			}
 		}
@@ -408,7 +444,17 @@ namespace GameInit
 		{
 			for (int i = 0; i < TOTAL_METEOR; i++)
 			{
-				DrawTexturePro(meteor[i].meteor_texture, meteor[i].sourceRec, meteor[i].destRec, meteor[i].origin, 0.0f, WHITE);
+				if (i == 0) 
+				{
+					DrawTexturePro(meteor[i].meteor_texture, meteor[i].sourceRec, meteor[i].destRec, meteor[i].origin, 0.0f, WHITE);
+					DrawRectangleRec(enemi2, BLACK);
+				}
+				else
+				{
+					DrawTexturePro(meteor[i].meteor_texture, meteor[i].sourceRec, meteor[i].destRec, meteor[i].origin, 180.0f, WHITE);
+					DrawRectangleRec(enemi, BLACK);
+				}
+		
 			}
 		}
 		static void checkColisionMeteor(Meteor meteor[])
@@ -458,10 +504,13 @@ namespace GameInit
 			//Colision meteoro-player
 			for (int i = 0; i < TOTAL_METEOR; i++)
 			{
-				player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(shipHeight / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(shipHeight / 2.5f), 12 };
-				if (CheckCollisionCircles(Vector2{ player.collider.x, player.collider.y }, player.collider.z, meteor[i].position, meteor[i].radius) && meteor[i].active)
+				player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(shipHeight /3/ 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(shipHeight/3 / 2.5f), 12 };
+				
+			//	if (CheckCollisionCircleRec(Vector2{ player.collider.x, player.collider.y }, player.collider.z,enemi))
+				if (CheckCollisionRecs(rec,enemi)|| CheckCollisionRecs(rec, enemi2))
 				{
 					instanceThisMeteor(meteor, i);
+				
 #ifdef MUSIC_ON
 					if (music)
 					{
@@ -484,6 +533,7 @@ namespace GameInit
 #endif
 					defeat();
 				}
+
 			}
 		}
 		static void movMeteor(Meteor meteor[])
@@ -495,16 +545,21 @@ namespace GameInit
 		}
 		static void instanceThisMeteor(Meteor meteor[], int thisMeteor)
 		{
+			
+
 			meteor[thisMeteor].x_inicial = GetRandomValue(screenWidth + RADIUS_BALL, screenWidth * 2) + RADIUS_BALL;
 			if (thisMeteor == 0)
 			{
 				meteor[thisMeteor].x = meteor[thisMeteor].x_inicial;
+				meteor[thisMeteor].y = screenHeight - RADIUS_BALL + GetRandomValue(100, 600);
 			}
 			else
 			{
-				meteor[thisMeteor].x = meteor[thisMeteor].x_inicial + meteor[thisMeteor].meteor_texture.width;
+				meteor[thisMeteor].x = meteor[0].x_inicial;
+				meteor[thisMeteor].y =  meteor[0].y - screenHeight  - 300 ;
 				//meteor[thisMeteor].x = meteor[thisMeteor].x_inicial + meteor[thisMeteor - 1].x_inicial/3 + meteor[thisMeteor].meteor_texture.width;
 			}
+			
 		}
 		static void initShoot(Shoot shoot[])
 		{
