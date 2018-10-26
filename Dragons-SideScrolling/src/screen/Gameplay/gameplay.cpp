@@ -16,7 +16,7 @@ namespace GameInit
 	Screen screen = MENU;
 	namespace Gameplay
 	{
-		Texture2D fond;
+		
 		enum Direction
 		{
 			Up = 1,
@@ -49,6 +49,14 @@ namespace GameInit
 			Vector2 origin;
 		};
 
+		struct Fondo {
+			Texture2D fond;
+			float x;
+			float y;
+			float x_inicial;
+			Vector2 position;
+			Vector2 speed;
+		};
 		struct Shoot {
 			Vector2 position;
 			Vector2 speed;
@@ -119,7 +127,7 @@ namespace GameInit
 		int currentFrame = 0;
 		Rectangle enemi;
 		Rectangle enemi2;
-
+		Fondo fondo[2];
 		Rectangle rec;
 
 		//--------------------------------------------
@@ -129,7 +137,26 @@ namespace GameInit
 		bool firstInit = true;
 		//--------------------------------------------
 		void initGame() {
-			fond = LoadTexture("res/fondo.png");
+			for (int i = 0; i < 2; i++)
+			{
+				if (i == 0) 
+				{
+					fondo[i].x = 0;
+					fondo[i].y = 0;
+					fondo[i].fond = LoadTexture("res/fondo.png");
+					fondo[i].position = Vector2{ 0.0f,0.0f };
+					fondo[i].speed = Vector2{ 0, 0 };
+				}
+				else
+				{
+					fondo[i].fond = LoadTexture("res/fondo.png");
+					fondo[i].x = fondo[i].fond.width;
+					fondo[i].y = 0;
+					fondo[i].position = Vector2{ 0.0f,0.0f };
+					fondo[i].speed = Vector2{ 0, 0 };
+				}
+			}
+		
 #ifdef MUSIC_ON
 			fxWav = LoadSound("res/Blip_Select.wav");
 			fxWav2 = LoadSound("res/Blip_Select2.wav");
@@ -171,6 +198,22 @@ namespace GameInit
 
 		void updateGame()
 		{
+			for (int i = 0; i <	2; i++)
+			{
+				
+				fondo[i].position = Vector2{ fondo[i].x,fondo[i].y };
+				fondo[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
+			}
+			for (int i = 0; i <2; i++)
+			{
+				fondo[i].x -= velocity * GetFrameTime();
+				if (fondo[i].x <= -fondo[i].fond.width)
+				{
+					fondo[i].x = (int)fondo[i].fond.width;
+				}
+			}
+			
+
 			for (int i = 0; i < TOTAL_METEOR; i++) 
 			{	
 				if (i == 1) 
@@ -349,7 +392,11 @@ namespace GameInit
 		}
 		void DrawGame()
 		{
-			DrawTexture(fond, 0, 0, WHITE);
+			for (int i = 0; i < 2; i++)
+			{
+				DrawTexture(fondo[i].fond, fondo[i].position.x, fondo[i].position.y, WHITE);
+			}
+		
 			if (pauseButtonAnimationOn)
 			{
 				DrawTexture(boton_pause, Gameplay::screenWidth - 100, 5, WHITE);
@@ -388,7 +435,6 @@ namespace GameInit
 					DrawTexture(negativeExit, Gameplay::screenWidth / 2 - exit.width / 2, Gameplay::screenHeight / 2 + exit.height + 5, WHITE);
 				}
 			}
-			DrawRectangleRec(rec, BLACK);
 		}
 		void initMeteor(Meteor meteor[])
 		{
@@ -447,12 +493,12 @@ namespace GameInit
 				if (i == 0) 
 				{
 					DrawTexturePro(meteor[i].meteor_texture, meteor[i].sourceRec, meteor[i].destRec, meteor[i].origin, 0.0f, WHITE);
-					DrawRectangleRec(enemi2, BLACK);
+					//DrawRectangleRec(enemi2, BLACK);
 				}
 				else
 				{
 					DrawTexturePro(meteor[i].meteor_texture, meteor[i].sourceRec, meteor[i].destRec, meteor[i].origin, 180.0f, WHITE);
-					DrawRectangleRec(enemi, BLACK);
+					//DrawRectangleRec(enemi, BLACK);
 				}
 		
 			}
