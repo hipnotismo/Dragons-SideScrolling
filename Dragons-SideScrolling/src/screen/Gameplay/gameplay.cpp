@@ -86,7 +86,6 @@ namespace Game
 		static void checkColisionMeteor(Meteor meteor[]);
 		static void movMeteor(Meteor meteor[]);
 		static void instanceThisMeteor(Meteor meteor[], int thisMeteor);
-		static void initShoot(Shoot shoot[]);
 		static void victory();
 		static void defeat();
 		// Initialization
@@ -161,19 +160,19 @@ namespace Game
 			}
 			for (int i = 0; i < 2; i++)
 			{
+				piso[0].fond = LoadTexture("res/piso.png");
 				if (i == 0)
 				{
-					piso[i].fond = LoadTexture("res/piso.png");
+					
 					piso[i].x = 0;
-					piso[i].y = screenHeight-piso[i].fond.height;
+					piso[i].y = screenHeight-piso[0].fond.height;
 					piso[i].position = Vector2{ 0.0f,0.0f };
 					piso[i].speed = Vector2{ 0, 0 };
 				}
 				else
 				{
-					piso[i].fond = LoadTexture("res/piso.png");
 					piso[i].x = fondo[i].fond.width;
-					piso[i].y = screenHeight - piso[i].fond.height;;
+					piso[i].y = screenHeight - piso[0].fond.height;;
 					piso[i].position = Vector2{ 0.0f,0.0f };
 					piso[i].speed = Vector2{ 0, 0 };
 				}
@@ -202,8 +201,6 @@ namespace Game
 			player.frameRec = { 0.0f, 0.0f, (float)player.player_texture.width /3, (float)player.player_texture.height };
 			//--------------------------------
 			initMeteor(meteor);
-			initShoot(shoot);
-	
 			menu = LoadTexture("res/boton_menu.png");
 			negativeMenu = LoadTexture("res/boton_menu2.png");
 			exit = LoadTexture("res/exit.png");
@@ -244,9 +241,9 @@ namespace Game
 			for (int i = 0; i <2; i++)
 			{
 				piso[i].x -= velocity * GetFrameTime();
-				if (piso[i].x <= -piso[i].fond.width)
+				if (piso[i].x <= -piso[0].fond.width)
 				{
-					piso[i].x = (int)piso[i].fond.width;
+					piso[i].x = (int)piso[0].fond.width;
 				}
 			}
 			
@@ -255,11 +252,11 @@ namespace Game
 			{
 				if (i == 1)
 				{
-					pisoenemi = { (float)piso[i].x - (float)piso[i].fond.width / 2,(float)piso[i].y - (float)piso[i].fond.height / 2+50,(float)piso[i].fond.width,(float)piso[i].fond.height };
+					pisoenemi = { (float)piso[i].x - (float)piso[0].fond.width / 2,(float)piso[i].y - (float)piso[0].fond.height / 2+50,(float)piso[0].fond.width,(float)piso[0].fond.height };
 				}
 				else
 				{
-					piso2 = { (float)piso[i].x - (float)piso[i].fond.width / 2,(float)piso[i].y - (float)piso[i].fond.height / 2 +50,(float)piso[i].fond.width,(float)piso[i].fond.height };
+					piso2 = { (float)piso[i].x - (float)piso[0].fond.width / 2,(float)piso[i].y - (float)piso[0].fond.height / 2 +50,(float)piso[0].fond.width,(float)piso[0].fond.height };
 				}
 			}
 			for (int i = 0; i < 2; i++)
@@ -297,11 +294,11 @@ namespace Game
 			{	
 				if (i == 1) 
 				{
-					enemi = { (float)meteor[i].x - (float)meteor[i].meteor_texture.width / 2,(float)meteor[i].y - (float)meteor[i].meteor_texture.height / 2,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
+					enemi = { (float)meteor[i].x - (float)meteor[0].meteor_texture.width / 2,(float)meteor[i].y - (float)meteor[0].meteor_texture.height / 2,(float)meteor[0].meteor_texture.width,(float)meteor[0].meteor_texture.height };
 				}
 				else 
 				{
-					enemi2 = { (float)meteor[i].x - (float)meteor[i].meteor_texture.width / 2,(float)meteor[i].y - (float)meteor[i].meteor_texture.height / 2,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
+					enemi2 = { (float)meteor[i].x - (float)meteor[0].meteor_texture.width / 2,(float)meteor[i].y - (float)meteor[0].meteor_texture.height / 2,(float)meteor[0].meteor_texture.width,(float)meteor[0].meteor_texture.height };
 				}
 			}
 		
@@ -383,7 +380,7 @@ namespace Game
 				}
 				for (int i = 0; i < TOTAL_METEOR; i++)
 				{
-					meteor[i].destRec = { meteor[i].x,meteor[i].y,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
+					meteor[i].destRec = { meteor[i].x,meteor[i].y,(float)meteor[0].meteor_texture.width,(float)meteor[0].meteor_texture.height };
 				}
 				player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width/3,(float)player.player_texture.height };
 			}
@@ -425,7 +422,7 @@ namespace Game
 		{
 			for (int i = 0; i < 2; i++)
 			{
-				DrawTexture(fondo[i].fond, fondo[i].position.x, fondo[i].position.y, WHITE);
+				DrawTexture(fondo[0].fond, fondo[i].position.x, fondo[i].position.y, WHITE);
 			}
 		
 			if (pauseButtonAnimationOn)
@@ -447,7 +444,7 @@ namespace Game
 			DrawText(FormatText("%01i", points), (halfScreenWidth) - 20, screenHeight / 20, 30, LIGHTGRAY);
 			for (int i = 0; i < 2; i++)
 			{
-				DrawTexture(piso[i].fond, piso[i].position.x, piso[i].position.y, WHITE);
+				DrawTexture(piso[0].fond, piso[i].position.x, piso[i].position.y, WHITE);
 			}
 
 			if (pause) 
@@ -474,11 +471,11 @@ namespace Game
 		}
 		void initMeteor(Meteor meteor[])
 		{
+			meteor[0].meteor_texture = LoadTexture("res/meteor.png");
 			for (int i = 0; i < TOTAL_METEOR; i++)
 			{
 				if (i == 0) 
 				{
-					meteor[i].meteor_texture = LoadTexture("res/meteor.png");
 					meteor[i].x_inicial = GetRandomValue(screenWidth + RADIUS_BALL, screenWidth * 2) + RADIUS_BALL;
 					if (i == 0)
 					{
@@ -486,27 +483,21 @@ namespace Game
 					}
 					else
 					{
-						meteor[i].x = meteor[i].x_inicial + meteor[i].meteor_texture.width;
+						meteor[i].x = meteor[i].x_inicial + meteor[0].meteor_texture.width;
 					}
 
 					meteor[i].y = screenHeight - RADIUS_BALL + GetRandomValue(100, 600);
-					cout << meteor[i].y << endl;
-					//while (meteor[i].y>screenHeight / 3 && meteor[i].y<screenHeight - screenHeight / 3)
-					//{
-					//	meteor[i].y = GetRandomValue(1, screenHeight);
-					//}
 					meteor[i].position = Vector2{ meteor[i].x, meteor[i].y };
 					meteor[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
 					meteor[i].radius = RADIUS_BALL;
 					meteor[i].active = true;
 					meteor[i].dir = (Direction)GetRandomValue(1, 8);
-					meteor[i].sourceRec = { 0.0f,0.0f,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
-					meteor[i].destRec = { meteor[i].x,meteor[i].y,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
-					meteor[i].origin = { (float)meteor[i].meteor_texture.width / 2,(float)meteor[i].meteor_texture.height / 2 };
+					meteor[i].sourceRec = { 0.0f,0.0f,(float)meteor[0].meteor_texture.width,(float)meteor[0].meteor_texture.height };
+					meteor[i].destRec = { meteor[i].x,meteor[i].y,(float)meteor[0].meteor_texture.width,(float)meteor[0].meteor_texture.height };
+					meteor[i].origin = { (float)meteor[0].meteor_texture.width / 2,(float)meteor[0].meteor_texture.height / 2 };
 				}
 				else 
 				{
-					meteor[i].meteor_texture = LoadTexture("res/meteor.png");
 					meteor[i].x = meteor[i-1].x;
 					meteor[i].y = meteor[0].y - screenHeight - 400;
 					meteor[i].position = Vector2{ meteor[i].x, meteor[i].y };
@@ -514,9 +505,9 @@ namespace Game
 					meteor[i].radius = RADIUS_BALL;
 					meteor[i].active = true;
 					meteor[i].dir = (Direction)GetRandomValue(1, 8);
-					meteor[i].sourceRec = { 0.0f,0.0f,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
-					meteor[i].destRec = { meteor[i].x,meteor[i].y,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
-					meteor[i].origin = { (float)meteor[i].meteor_texture.width / 2,(float)meteor[i].meteor_texture.height / 2 };
+					meteor[i].sourceRec = { 0.0f,0.0f,(float)meteor[0].meteor_texture.width,(float)meteor[0].meteor_texture.height };
+					meteor[i].destRec = { meteor[i].x,meteor[i].y,(float)meteor[0].meteor_texture.width,(float)meteor[0].meteor_texture.height };
+					meteor[i].origin = { (float)meteor[0].meteor_texture.width / 2,(float)meteor[0].meteor_texture.height / 2 };
 				}
 				
 
@@ -528,12 +519,12 @@ namespace Game
 			{
 				if (i == 0) 
 				{
-					DrawTexturePro(meteor[i].meteor_texture, meteor[i].sourceRec, meteor[i].destRec, meteor[i].origin, 0.0f, WHITE);
+					DrawTexturePro(meteor[0].meteor_texture, meteor[i].sourceRec, meteor[i].destRec, meteor[i].origin, 0.0f, WHITE);
 					//DrawRectangleRec(enemi2, BLACK);
 				}
 				else
 				{
-					DrawTexturePro(meteor[i].meteor_texture, meteor[i].sourceRec, meteor[i].destRec, meteor[i].origin, 180.0f, WHITE);
+					DrawTexturePro(meteor[0].meteor_texture, meteor[i].sourceRec, meteor[i].destRec, meteor[i].origin, 180.0f, WHITE);
 					//DrawRectangleRec(enemi, BLACK);
 				}
 		
@@ -601,18 +592,6 @@ namespace Game
 				//meteor[thisMeteor].x = meteor[thisMeteor].x_inicial + meteor[thisMeteor - 1].x_inicial/3 + meteor[thisMeteor].meteor_texture.width;
 			}
 			
-		}
-		static void initShoot(Shoot shoot[])
-		{
-			for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
-			{
-				shoot[i].position = Vector2{ 0, 0 };
-				shoot[i].speed = Vector2{ 0, 0 };
-				shoot[i].radius = 2;
-				shoot[i].active = false;
-				shoot[i].lifeSpawn = 0;
-				shoot[i].color = WHITE;
-			}
 		}
 		static void victory()
 		{
