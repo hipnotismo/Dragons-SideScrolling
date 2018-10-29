@@ -31,21 +31,13 @@ namespace Game
 				exit = LoadTexture("res/exit.png");
 				negativeExit = LoadTexture("res/exit2.png");
 				fond = LoadTexture("res/menu.png");
-				recMenu = { (float)screenWidth / 2 - menu.width / 2,(float)screenHeight / 2 ,(float)menu.width,(float)menu.height };
-				recExit = { (float)screenWidth / 2 - exit.width / 2,(float)screenHeight / 2 + exit.height + 5,(float)exit.width,(float)exit.height };
+				recMenu = { (float)halfScreenWidth - menu.width / 2,(float)screenHeight / 2 ,(float)menu.width,(float)menu.height };
+				recExit = { (float)halfScreenWidth - exit.width / 2,(float)screenHeight / 2 + exit.height + 5,(float)exit.width,(float)exit.height };
 			}
 		}
 		void UpdateCredits()
 		{
 			initCredits();
-			if (screenWidth >= 1600)
-			{
-				fontSize = 40;
-			}
-			else 
-			{
-				fontSize = 20;
-			}
 			if (CheckCollisionPointRec(GetMousePosition(), recMenu))
 			{
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
@@ -77,24 +69,24 @@ namespace Game
 			DrawTexture(fond, 0, 0, WHITE);
 			if (menuButtonAnimationOn)
 			{
-				DrawTexture(menu, screenWidth / 2 - menu.width / 2,screenHeight / 2, WHITE);
+				DrawTexture(menu, halfScreenWidth - menu.width / 2,screenHeight / 2, WHITE);
 			}
 			else
 			{
-				DrawTexture(negativeMenu, screenWidth / 2 - negativeMenu.width / 2, screenHeight / 2, WHITE);
+				DrawTexture(negativeMenu, halfScreenWidth  - negativeMenu.width / 2, screenHeight / 2, WHITE);
 			}
 			if (exitButtonAnimationOn)
 			{
-				DrawTexture(exit, screenWidth / 2 - exit.width / 2, screenHeight / 2 + exit.height + 5, WHITE);
+				DrawTexture(exit, halfScreenWidth - exit.width / 2, screenHeight / 2 + exit.height + 5, WHITE);
 			}
 			else
 			{
-				DrawTexture(negativeExit, screenWidth / 2 - exit.width / 2,screenHeight / 2 + exit.height + 5, WHITE);
+				DrawTexture(negativeExit, halfScreenWidth - exit.width / 2,screenHeight / 2 + exit.height + 5, WHITE);
 			}
-			DrawText("Programmer: Cusumano Cristian", screenWidth / 2 - (MeasureText("Programmer: Cusumano Cristian", fontSize) / 2), positionY , fontSize, GOLD);
-			DrawText("Music and Efects By: Cusumano Cristian", screenWidth / 2 - (MeasureText("Music and Efects By: Cusumano Cristian", fontSize) / 2), positionY + fontSize*2 + 5, fontSize, GOLD);
-			DrawText("Tools: Raylib - BoscaCeoil - MusicMaker - Photoshop",screenWidth / 2 - (MeasureText("Tools: Raylib - BoscaCeoil - MusicMaker - Photoshop", fontSize) / 2), positionY + fontSize * 4 + 5, fontSize, GOLD);
-			DrawText("v0.2", screenWidth / 2 - (MeasureText("v0.1", fontSize) / 2), positionY + fontSize * 13 + 5, fontSize, GOLD);
+			DrawText("Programmer: Cusumano Cristian", halfScreenWidth - (MeasureText("Programmer: Cusumano Cristian", fontSize) / 2), positionY , fontSize, GOLD);
+			DrawText("Music and Efects By: Cusumano Cristian", halfScreenWidth - (MeasureText("Music and Efects By: Cusumano Cristian", fontSize) / 2), positionY + fontSize*2 + 5, fontSize, GOLD);
+			DrawText("Tools: Raylib - BoscaCeoil - MusicMaker - Photoshop",halfScreenWidth - (MeasureText("Tools: Raylib - BoscaCeoil - MusicMaker - Photoshop", fontSize) / 2), positionY + fontSize * 4 + 5, fontSize, GOLD);
+			DrawText("v0.2", halfScreenWidth - (MeasureText("v0.1", fontSize) / 2), positionY + fontSize * 13 + 5, fontSize, GOLD);
 		}
 	}
 }

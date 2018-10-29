@@ -30,8 +30,8 @@ namespace Game
 				exit = LoadTexture("res/exit.png");
 				negativeExit = LoadTexture("res/exit2.png");
 				fond = LoadTexture("res/menu.png");
-				recMenu = { (float)screenWidth / 2 - menu.width / 2,(float)screenHeight / 2 ,(float)menu.width,(float)menu.height };
-				recExit = { (float)screenWidth / 2 - exit.width / 2,(float)screenHeight / 2 + exit.height + 5,(float)exit.width,(float)exit.height };
+				recMenu = { (float)halfScreenWidth - menu.width / 2,(float)screenHeight / 2 ,(float)menu.width,(float)menu.height };
+				recExit = { (float)halfScreenWidth - exit.width / 2,(float)screenHeight / 2 + exit.height + 5,(float)exit.width,(float)exit.height };
 			}
 		}
 		void UpdateWin()
@@ -67,28 +67,23 @@ namespace Game
 		{
 			static int fontSizeTitle = 50;
 			static int fontSize = 20;
-			if (screenWidth >= 1600)
-			{
-				fontSize = 40;
-				fontSizeTitle = 100;
-			}
 			DrawTexture(fond, 0, 0, WHITE);
-			DrawText("You Win,Congrats!", screenWidth / 2 - (MeasureText("You Win,Congrats!", fontSizeTitle) / 2),screenHeight / 4, fontSizeTitle, GOLD);
+			DrawText("You Win,Congrats!", halfScreenWidth  - (MeasureText("You Win,Congrats!", fontSizeTitle) / 2),screenHeight / 4, fontSizeTitle, GOLD);
 			if (menuButtonAnimationOn)
 			{
-				DrawTexture(menu, screenWidth / 2 - menu.width / 2, screenHeight / 2, WHITE);
+				DrawTexture(menu, halfScreenWidth  - menu.width / 2, screenHeight / 2, WHITE);
 			}
 			else
 			{
-				DrawTexture(negativeMenu, screenWidth / 2 - negativeMenu.width / 2, screenHeight / 2, WHITE);
+				DrawTexture(negativeMenu, halfScreenWidth  - negativeMenu.width / 2, screenHeight / 2, WHITE);
 			}
 			if (exitButtonAnimationOn)
 			{
-				DrawTexture(exit, screenWidth / 2 - exit.width / 2, screenHeight / 2 + exit.height + 5, WHITE);
+				DrawTexture(exit, halfScreenWidth  - exit.width / 2, screenHeight / 2 + exit.height + 5, WHITE);
 			}
 			else
 			{
-				DrawTexture(negativeExit, screenWidth / 2 - exit.width / 2, screenHeight / 2 + exit.height + 5, WHITE);
+				DrawTexture(negativeExit, halfScreenWidth  - exit.width / 2, screenHeight / 2 + exit.height + 5, WHITE);
 			}
 		}
 		void closeWin() 

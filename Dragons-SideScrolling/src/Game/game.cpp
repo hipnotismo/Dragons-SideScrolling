@@ -19,6 +19,7 @@ namespace Game
 	Music MusicLoop;
 	int screenWidth = 600;
 	int screenHeight = 800;
+	int halfScreenWidth = screenWidth / 2;
 	void Init() 
 	{
 		InitWindow(screenWidth, screenHeight, "Dragons");

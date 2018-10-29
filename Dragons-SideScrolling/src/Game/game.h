@@ -15,6 +15,7 @@ namespace Game
 	extern bool endGame;
 	extern int screenWidth;
 	extern int screenHeight;
+	extern int halfScreenWidth;
 	//---------------------------------------------
 	void LoadScreen();
 	//---------------------------------------------

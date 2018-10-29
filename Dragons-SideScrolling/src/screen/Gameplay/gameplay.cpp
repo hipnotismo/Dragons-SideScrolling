@@ -212,8 +212,8 @@ namespace Game
 			asteroids = LoadTexture("res/asteroids.png");
 			boton_pause= LoadTexture("res/pause.png");
 			negativePause= LoadTexture("res/pause2.png");
-			recMenu = { (float)screenWidth / 2 - menu.width / 2,(float)screenHeight / 2 ,(float)menu.width,(float)menu.height };
-			recExit = { (float)screenWidth / 2 - exit.width / 2,(float)screenHeight / 2 + exit.height + 5,(float)exit.width,(float)exit.height };
+			recMenu = { (float)halfScreenWidth  - menu.width / 2,(float)screenHeight / 2 ,(float)menu.width,(float)menu.height };
+			recExit = { (float)halfScreenWidth  - exit.width / 2,(float)screenHeight / 2 + exit.height + 5,(float)exit.width,(float)exit.height };
 			recPause = { (float)screenWidth - 100, (float)5,(float)boton_pause.width,(float)boton_pause.height };
 			animationDragonOn = false;
 		}
@@ -395,7 +395,7 @@ namespace Game
 					{
 						initMeteor(meteor);
 						points = INIT_SCORE;
-						player.position = Vector2{ (float)screenWidth / 2, (float)screenHeight / 2 - dragonHeight / 2 };
+						player.position = Vector2{ (float)halfScreenWidth, (float)screenHeight / 2 - dragonHeight / 2 };
 						player.rotation = 0;
 						pause = !pause;
 						screen = MENU;
@@ -444,7 +444,7 @@ namespace Game
 				if (shoot[i].active) DrawCircleV(shoot[i].position, shoot[i].radius, BLACK);
 			}
 
-			DrawText(FormatText("%01i", points), (screenWidth / 2) - 20, screenHeight / 20, 30, LIGHTGRAY);
+			DrawText(FormatText("%01i", points), (halfScreenWidth) - 20, screenHeight / 20, 30, LIGHTGRAY);
 			for (int i = 0; i < 2; i++)
 			{
 				DrawTexture(piso[i].fond, piso[i].position.x, piso[i].position.y, WHITE);
@@ -456,19 +456,19 @@ namespace Game
 				DrawTexture(asteroids, 0, 0, WHITE);
 				if (menuButtonAnimationOn)
 				{
-					DrawTexture(menu,screenWidth / 2 - menu.width / 2, screenHeight / 2, WHITE);
+					DrawTexture(menu,halfScreenWidth - menu.width / 2, screenHeight / 2, WHITE);
 				}
 				else
 				{
-					DrawTexture(negativeMenu, screenWidth / 2 - negativeMenu.width / 2, screenHeight / 2, WHITE);
+					DrawTexture(negativeMenu, halfScreenWidth - negativeMenu.width / 2, screenHeight / 2, WHITE);
 				}
 				if (exitButtonAnimationOn)
 				{
-					DrawTexture(exit, screenWidth / 2 - exit.width / 2, screenHeight / 2 + exit.height + 5, WHITE);
+					DrawTexture(exit, halfScreenWidth - exit.width / 2, screenHeight / 2 + exit.height + 5, WHITE);
 				}
 				else
 				{
-					DrawTexture(negativeExit, screenWidth / 2 - exit.width / 2, screenHeight / 2 + exit.height + 5, WHITE);
+					DrawTexture(negativeExit, halfScreenWidth  - exit.width / 2, screenHeight / 2 + exit.height + 5, WHITE);
 				}
 			}
 		}

@@ -47,17 +47,9 @@ namespace Game
 			if (firstInit) 
 			{
 				firstInit = false;
-			if (screenWidth >= 1600)
-			{
-				fontSize = 40;
-				fontSizeTitle = 100;
-
-			}
-			else
-			{
 				fontSizeTitle = 50;
 				fontSize = 20;
-			}
+			
 			playButtonAnimationOn = true;
 			helpButtonAnimationOn = true;
 			exitButtonAnimationOn = true;
@@ -78,12 +70,12 @@ namespace Game
 			quit= LoadTexture("res/quit.png");
 			negativeQuit = LoadTexture("res/quit2.png");
 			//recplay = {(float)play.width,(float)play.height,(float)Gameplay::screenWidth / 2 - play.width / 2 ,(float)Gameplay::screenHeight / 2 - play.height / 2 };
-			recplay = { (float)screenWidth / 2 - play.width / 2,(float)screenHeight / 2 - play.height,(float)play.width,(float)play.height };
-			recCredits= { (float)screenWidth / 2 - play.width / 2,(float)screenHeight / 2,(float)play.width,(float)play.height };
-			recHelp = { (float)screenWidth / 2 - help.width / 2,(float)screenHeight / 2  + help.height + 5,(float)help.width,(float)help.height };
-			recMuteOn = { (float)screenWidth / 2 - mute.width / 2,(float)screenHeight / 2  + mute.height * 2 + 5,(float)mute.width,(float)mute.height };
-			recExit = { (float)screenWidth / 2 - exit.width / 2,(float)screenHeight / 2 + exit.height * 3 + 5,(float)exit.width,(float)exit.height };
-			recQuit= { (float)screenWidth / 2 + help.width ,(float)screenHeight / 2 + help.height + help.height / 2  + 5,(float)quit.width,(float)quit.height };
+			recplay = { (float)halfScreenWidth - play.width / 2,(float)screenHeight / 2 - play.height,(float)play.width,(float)play.height };
+			recCredits= { (float)halfScreenWidth - play.width / 2,(float)screenHeight / 2,(float)play.width,(float)play.height };
+			recHelp = { (float)halfScreenWidth - help.width / 2,(float)screenHeight / 2  + help.height + 5,(float)help.width,(float)help.height };
+			recMuteOn = { (float)halfScreenWidth - mute.width / 2,(float)screenHeight / 2  + mute.height * 2 + 5,(float)mute.width,(float)mute.height };
+			recExit = { (float)halfScreenWidth - exit.width / 2,(float)screenHeight / 2 + exit.height * 3 + 5,(float)exit.width,(float)exit.height };
+			recQuit= { (float)screenWidth - (screenWidth / 100 * 25) ,(float)screenHeight / 2 + help.height + help.height / 2  + 5,(float)quit.width,(float)quit.height };
 			}
 		}
 
@@ -92,38 +84,38 @@ namespace Game
 			DrawTexture(fond, 0, 0, WHITE);
 			if (playButtonAnimationOn)
 			{
-				DrawTexture(play, screenWidth / 2 - play.width / 2, screenHeight / 2 -play.height, WHITE);
+				DrawTexture(play, halfScreenWidth - play.width / 2, screenHeight / 2 -play.height, WHITE);
 			}
 			else
 			{
-				DrawTexture(negativePlay, screenWidth / 2 - negativePlay.width / 2, screenHeight / 2 - play.height, WHITE);
+				DrawTexture(negativePlay, halfScreenWidth - negativePlay.width / 2, screenHeight / 2 - play.height, WHITE);
 			}
 			if (creditsButtonAnimationOn)
 			{
-				DrawTexture(credits, screenWidth / 2 - credits.width / 2, screenHeight / 2, WHITE);
+				DrawTexture(credits, halfScreenWidth - credits.width / 2, screenHeight / 2, WHITE);
 			}
 			else
 			{
-				DrawTexture(negativeCredits, screenWidth / 2 - negativeCredits.width / 2, screenHeight / 2, WHITE);
+				DrawTexture(negativeCredits, halfScreenWidth - negativeCredits.width / 2, screenHeight / 2, WHITE);
 			}
 
 			if (helpButtonAnimationOn)
 			{
-				DrawTexture(help, screenWidth / 2 - help.width / 2, screenHeight / 2 + help.height + 5, WHITE);
+				DrawTexture(help, halfScreenWidth  - help.width / 2, screenHeight / 2 + help.height + 5, WHITE);
 			}
 			else
 			{
-				DrawTexture(negativeHelp, screenWidth / 2 - help.width / 2, screenHeight / 2 + help.height + 5, WHITE);
+				DrawTexture(negativeHelp, halfScreenWidth  - help.width / 2, screenHeight / 2 + help.height + 5, WHITE);
 			}
 			if (muteOnButtonAnimationOn)
 			{
 				if (music)
 				{
-					DrawTexture(mute, screenWidth / 2 - mute.width / 2, screenHeight / 2 + mute.height * 2 + 5, WHITE);
+					DrawTexture(mute, halfScreenWidth - mute.width / 2, screenHeight / 2 + mute.height * 2 + 5, WHITE);
 				}
 				else
 				{
-					DrawTexture(on, screenWidth / 2 - mute.width / 2, screenHeight / 2 + mute.height * 2 + 5, WHITE);
+					DrawTexture(on, halfScreenWidth - mute.width / 2, screenHeight / 2 + mute.height * 2 + 5, WHITE);
 				}
 
 			}
@@ -131,35 +123,34 @@ namespace Game
 			{
 				if (music)
 				{
-					DrawTexture(negativeMute, screenWidth / 2 - mute.width / 2, screenHeight / 2 + mute.height * 2 + 5, WHITE);
+					DrawTexture(negativeMute, halfScreenWidth - mute.width / 2, screenHeight / 2 + mute.height * 2 + 5, WHITE);
 				}
 				else
 				{
-					DrawTexture(negativeOn, screenWidth / 2 - mute.width / 2, screenHeight / 2 + mute.height * 2 + 5, WHITE);
+					DrawTexture(negativeOn, halfScreenWidth  - mute.width / 2, screenHeight / 2 + mute.height * 2 + 5, WHITE);
 				}
 			}
 			if (exitButtonAnimationOn)
 			{
-				DrawTexture(exit, screenWidth / 2 - exit.width / 2, screenHeight / 2 + exit.height * 3 + 5, WHITE);
+				DrawTexture(exit, halfScreenWidth - exit.width / 2, screenHeight / 2 + exit.height * 3 + 5, WHITE);
 			}
 			else
 			{
-				DrawTexture(negativeExit, screenWidth / 2 - exit.width / 2, screenHeight / 2 + exit.height * 3 + 5, WHITE);
+				DrawTexture(negativeExit, halfScreenWidth - exit.width / 2, screenHeight / 2 + exit.height * 3 + 5, WHITE);
 			}
-			DrawText("v0.2", screenWidth / 2 - (MeasureText("v0.1", 25) / 2),screenHeight - screenHeight / 20, 25, BLACK);
+			DrawText("v0.2", screenWidth -(screenWidth/100*5)- (MeasureText("v0.1", 25) / 2),screenHeight - screenHeight / 20, 25, BLACK);
 			if (settings)
 			{
-				DrawRectangle(screenWidth / 2 - (MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) / 2) - 5, screenHeight - screenHeight / 3, MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) + 10, fontSize * 3 + 15, LIGHTGRAY);
-				DrawRectangleLines(screenWidth / 2 - (MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) / 2) - 5, screenHeight - screenHeight / 3, MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) + 10, fontSize * 3 + 15, GOLD);
-				DrawText("RightClick -> Move", screenWidth / 2 - (MeasureText("RightClick -> Move", fontSize) / 2), screenHeight - screenHeight / 3 + 5, fontSize, WHITE);
-				DrawText("LeftClick -> Shoot", screenWidth / 2 - (MeasureText("LeftClick -> Shoot", fontSize) / 2), screenHeight - screenHeight / 3 + fontSize * 2 + 5, fontSize, WHITE);
+				DrawRectangle(halfScreenWidth - (MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) / 2) - 5, screenHeight - screenHeight / 3, MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) + 10, fontSize * 3 + 15, GRAY);
+				DrawRectangleLines(halfScreenWidth - (MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) / 2) - 5, screenHeight - screenHeight / 3, MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) + 10, fontSize * 3 + 15, GOLD);
+				DrawText("RightClick -> Up", halfScreenWidth  - (MeasureText("RightClick -> Move", fontSize) / 2), screenHeight - screenHeight / 3 + fontSize+ 5, fontSize, WHITE);
 				if (quitButtonAnimationOn)
 				{
-					DrawTexture(quit, screenWidth / 2 +help.width, screenHeight / 2 + help.height +help.height/2 + 5, WHITE);
+					DrawTexture(quit, screenWidth - (screenWidth / 100 * 25) , screenHeight / 2 + help.height +help.height/2 , WHITE);
 				}
 				else
 				{
-					DrawTexture(negativeQuit, screenWidth / 2 + help.width, screenHeight / 2 + help.height + help.height / 2 + 5, WHITE);
+					DrawTexture(negativeQuit, screenWidth - (screenWidth / 100 * 25) , screenHeight / 2 + help.height + help.height / 2, WHITE);
 				}
 			}
 		}
