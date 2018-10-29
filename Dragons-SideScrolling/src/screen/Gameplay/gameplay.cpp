@@ -419,18 +419,10 @@ namespace Game
 		}
 		void DrawGame()
 		{
+		
 			for (int i = 0; i < 2; i++)
 			{
 				DrawTexture(fondo[0].fond, fondo[i].position.x, fondo[i].position.y, WHITE);
-			}
-		
-			if (pauseButtonAnimationOn)
-			{
-				DrawTexture(boton_pause,screenWidth - 100, 5, WHITE);
-			}
-			else
-			{
-				DrawTexture(negativePause, screenWidth - 100, 5, WHITE);
 			}
 			//DrawTextureRec(player.player_texture, , player.position, WHITE);
 			DrawTexturePro(player.player_texture, player.frameRec, player.destRec, player.origin, player.rotation, WHITE);
@@ -466,6 +458,14 @@ namespace Game
 				{
 					DrawTexture(negativeExit, halfScreenWidth  - exit.width / 2, screenHeight / 2 + exit.height + 5, WHITE);
 				}
+			}
+			if (pauseButtonAnimationOn)
+			{
+				DrawTexture(boton_pause, screenWidth - 100, 5, WHITE);
+			}
+			else
+			{
+				DrawTexture(negativePause, screenWidth - 100, 5, WHITE);
 			}
 		}
 		void initEnemi(Enemi _enemi[])
