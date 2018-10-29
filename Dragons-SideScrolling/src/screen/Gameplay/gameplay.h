@@ -3,13 +3,11 @@
 
 #include "raylib.h"
 
-namespace GameInit
+namespace Game
 {
 	namespace Gameplay
 	{
 		extern bool firstInit;
-		extern int screenWidth;
-		extern int screenHeight;
 		extern bool left;
 		extern bool right;
 		void initGame();
@@ -30,7 +28,7 @@ namespace GameInit
 
 		};
 		extern Player player;
-		extern float shipHeight;
+		extern float dragonHeight;
 	}
 }
 #endif

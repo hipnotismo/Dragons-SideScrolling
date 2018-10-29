@@ -1,5 +1,5 @@
 #pragma once
-namespace GameInit 
+namespace Game
 {
 	namespace initCredits 
 	{

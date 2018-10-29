@@ -3,6 +3,6 @@
 
 void main()
 {
-	GameInit::LoadScreen();
+	Game::LoadScreen();
 }
 

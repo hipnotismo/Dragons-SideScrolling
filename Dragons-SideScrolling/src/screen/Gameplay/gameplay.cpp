@@ -6,12 +6,12 @@
 
 #include "raylib.h"
 #include "Game\game.h"
-#include "Logic\mov_ship.h"
+#include "Logic\mov_dragon.h"
 #include <iostream>
 using namespace std;
 
 //#define MUSIC_ON
-namespace GameInit
+namespace Game
 {
 	Screen screen = MENU;
 	namespace Gameplay
@@ -91,8 +91,7 @@ namespace GameInit
 		static void defeat();
 		// Initialization
 		//-------------------------------------------- Statics
-		int screenWidth = 600;
-		int screenHeight = 800;
+	
 		float time = 0;
 		static int checkGame = 1;
 		static const int TOTAL_METEOR = 2;
@@ -115,23 +114,24 @@ namespace GameInit
 		static Sound fxWav3;
 		static Sound fxWav4;
 		static int velocity = INIT_VELOCITY;
-		Player player;
-		float shipHeight;
+		static float dragonHeight;
 		static const float PLAYER_BASE_SIZE = 20.0f;
 		static const float PLAYER_SPEED = 300.0f;
 		static Shoot shoot[PLAYER_MAX_SHOOTS];
 		static short int points = 0;
 		static bool pause;
 		static const int framesSpeed = 8;
-		int framesCounter = 0;
-		int currentFrame = 0;
-		Rectangle enemi;
-		Rectangle enemi2;
-		Rectangle pisoenemi;
-		Rectangle piso2;
-		Fondo fondo[2];
-		Fondo piso[2];
-		Rectangle rec;
+		static int framesCounter = 0;
+		static int currentFrame = 0;
+		static Rectangle enemi;
+		static Rectangle enemi2;
+		static Rectangle pisoenemi;
+		static Rectangle piso2;
+		static Fondo fondo[2];
+		static Fondo piso[2];
+		static Rectangle rec;
+		static bool animationDragonOn;
+		Player player;
 
 		//--------------------------------------------
 
@@ -188,18 +188,18 @@ namespace GameInit
 			velocity = INIT_VELOCITY;
 			//--------------------------------
 			
-			shipHeight = (PLAYER_BASE_SIZE / 2) / tanf(20 * DEG2RAD) /2;
+			dragonHeight = (PLAYER_BASE_SIZE / 2) / tanf(20 * DEG2RAD) /2;
 			player.player_texture = LoadTexture("res/Space_Ship.png");
-			player.position = Vector2{ 200.0f, (float)screenHeight / 3 - shipHeight / 3 };
+			player.position = Vector2{ 200.0f, (float)screenHeight / 3 - dragonHeight / 3 };
 			player.speed = Vector2{ 0, 0 };
 			player.acceleration = 0;
 			player.rotation = 0;
-			player.sourceRec = { 0.0f,0.0f,(float)player.player_texture.width,(float)player.player_texture.height };
-			player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width,(float)player.player_texture.height };
+			player.sourceRec = { 0.0f,0.0f,(float)player.player_texture.width/3,(float)player.player_texture.height };
+			player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width/3,(float)player.player_texture.height };
 			player.origin = { (float)player.player_texture.width / 3,(float)player.player_texture.height / 3 };
-			player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(shipHeight/3 / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(shipHeight/3 / 2.5f), 12 };
+			player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(dragonHeight/3 / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(dragonHeight/3 / 2.5f), 12 };
 			player.color = LIGHTGRAY;
-			player.frameRec = { 0.0f, 0.0f, (float)player.player_texture.width / 3, (float)player.player_texture.height };
+			player.frameRec = { 0.0f, 0.0f, (float)player.player_texture.width /3, (float)player.player_texture.height };
 			//--------------------------------
 			initMeteor(meteor);
 			initShoot(shoot);
@@ -212,9 +212,10 @@ namespace GameInit
 			asteroids = LoadTexture("res/asteroids.png");
 			boton_pause= LoadTexture("res/pause.png");
 			negativePause= LoadTexture("res/pause2.png");
-			recMenu = { (float)Gameplay::screenWidth / 2 - menu.width / 2,(float)Gameplay::screenHeight / 2 ,(float)menu.width,(float)menu.height };
-			recExit = { (float)Gameplay::screenWidth / 2 - exit.width / 2,(float)Gameplay::screenHeight / 2 + exit.height + 5,(float)exit.width,(float)exit.height };
-			recPause = { (float)Gameplay::screenWidth - 100, (float)5,(float)boton_pause.width,(float)boton_pause.height };
+			recMenu = { (float)screenWidth / 2 - menu.width / 2,(float)screenHeight / 2 ,(float)menu.width,(float)menu.height };
+			recExit = { (float)screenWidth / 2 - exit.width / 2,(float)screenHeight / 2 + exit.height + 5,(float)exit.width,(float)exit.height };
+			recPause = { (float)screenWidth - 100, (float)5,(float)boton_pause.width,(float)boton_pause.height };
+			animationDragonOn = false;
 		}
 
 
@@ -263,7 +264,7 @@ namespace GameInit
 			}
 			for (int i = 0; i < 2; i++)
 			{
-				player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(shipHeight / 3 / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(shipHeight / 3 / 2.5f), 12 };
+				player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), 12 };
 
 				//	if (CheckCollisionCircleRec(Vector2{ player.collider.x, player.collider.y }, player.collider.z,enemi))
 				if (CheckCollisionRecs(rec, pisoenemi) || CheckCollisionRecs(rec, piso2))
@@ -321,7 +322,7 @@ namespace GameInit
 				}
 				victory();
 				SetExitKey(0);
-				Logic_ship::mov_ship();
+				Logic_dragon::mov_dragon();
 				if (IsKeyDown(KEY_M))
 				{
 					pause = !pause;
@@ -350,16 +351,19 @@ namespace GameInit
 				//-------------------------------------------------------
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 				{
-					
-					framesCounter += 1;
-
-					if (framesCounter*GetFrameTime() >= (1 / framesSpeed))
+					if (!animationDragonOn)
 					{
-						currentFrame++;
+						animationDragonOn = true;
+						framesCounter += 1;
 
-						if (currentFrame > 1) currentFrame = 1;
+						if (framesCounter*GetFrameTime() >= (1 / framesSpeed))
+						{
+							currentFrame++;
 
-						player.frameRec.x = (float)currentFrame*(float)player.player_texture.width / 3;
+							if (currentFrame > 1) currentFrame = 1;
+
+							player.frameRec.x = (float)currentFrame*(float)player.player_texture.width / 3;
+						}
 					}
 					
 				}
@@ -374,65 +378,14 @@ namespace GameInit
 							currentFrame = 0;
 							player.frameRec.x = (float)currentFrame*(float)player.player_texture.width / 3;
 						}
-					}
-					
-				
-				}
-
-				// Shoot life timer
-				for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
-				{
-					if (shoot[i].active)
-					{
-						shoot[i].lifeSpawn += 1 * GetFrameTime();
-					}
-				}
-
-				// Shoot logic
-				for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
-				{
-					if (shoot[i].active)
-					{
-						// Movement
-						shoot[i].position.x += shoot[i].speed.x* GetFrameTime();
-						shoot[i].position.y -= shoot[i].speed.y* GetFrameTime();
-
-						// Collision logic: shoot vs walls
-						if (shoot[i].position.x > screenWidth + shoot[i].radius)
-						{
-							shoot[i].active = false;
-							shoot[i].lifeSpawn = 0;
-						}
-						else if (shoot[i].position.x < 0 - shoot[i].radius)
-						{
-							shoot[i].active = false;
-							shoot[i].lifeSpawn = 0;
-						}
-						if (shoot[i].position.y > screenHeight + shoot[i].radius)
-						{
-							shoot[i].active = false;
-							shoot[i].lifeSpawn = 0;
-						}
-						else if (shoot[i].position.y < 0 - shoot[i].radius)
-						{
-							shoot[i].active = false;
-							shoot[i].lifeSpawn = 0;
-						}
-						// Life of shoot
-						if (shoot[i].lifeSpawn >= 60)
-						{
-							shoot[i].position = Vector2{ 0, 0 };
-							shoot[i].speed = Vector2{ 0, 0 };
-							shoot[i].lifeSpawn = 0;
-							shoot[i].active = false;
-						}
-					}
+						animationDragonOn = false;
+					}				
 				}
 				for (int i = 0; i < TOTAL_METEOR; i++)
 				{
 					meteor[i].destRec = { meteor[i].x,meteor[i].y,(float)meteor[i].meteor_texture.width,(float)meteor[i].meteor_texture.height };
 				}
-				player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width/2,(float)player.player_texture.height };
+				player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width/3,(float)player.player_texture.height };
 			}
 			else 
 			{
@@ -442,7 +395,7 @@ namespace GameInit
 					{
 						initMeteor(meteor);
 						points = INIT_SCORE;
-						player.position = Vector2{ (float)screenWidth / 2, (float)screenHeight / 2 - shipHeight / 2 };
+						player.position = Vector2{ (float)screenWidth / 2, (float)screenHeight / 2 - dragonHeight / 2 };
 						player.rotation = 0;
 						pause = !pause;
 						screen = MENU;
@@ -477,11 +430,11 @@ namespace GameInit
 		
 			if (pauseButtonAnimationOn)
 			{
-				DrawTexture(boton_pause, Gameplay::screenWidth - 100, 5, WHITE);
+				DrawTexture(boton_pause,screenWidth - 100, 5, WHITE);
 			}
 			else
 			{
-				DrawTexture(negativePause, Gameplay::screenWidth - 100, 5, WHITE);
+				DrawTexture(negativePause, screenWidth - 100, 5, WHITE);
 			}
 			//DrawTextureRec(player.player_texture, , player.position, WHITE);
 			DrawTexturePro(player.player_texture, player.frameRec, player.destRec, player.origin, player.rotation, WHITE);
@@ -503,19 +456,19 @@ namespace GameInit
 				DrawTexture(asteroids, 0, 0, WHITE);
 				if (menuButtonAnimationOn)
 				{
-					DrawTexture(menu, Gameplay::screenWidth / 2 - menu.width / 2, Gameplay::screenHeight / 2, WHITE);
+					DrawTexture(menu,screenWidth / 2 - menu.width / 2, screenHeight / 2, WHITE);
 				}
 				else
 				{
-					DrawTexture(negativeMenu, Gameplay::screenWidth / 2 - negativeMenu.width / 2, Gameplay::screenHeight / 2, WHITE);
+					DrawTexture(negativeMenu, screenWidth / 2 - negativeMenu.width / 2, screenHeight / 2, WHITE);
 				}
 				if (exitButtonAnimationOn)
 				{
-					DrawTexture(exit, Gameplay::screenWidth / 2 - exit.width / 2, Gameplay::screenHeight / 2 + exit.height + 5, WHITE);
+					DrawTexture(exit, screenWidth / 2 - exit.width / 2, screenHeight / 2 + exit.height + 5, WHITE);
 				}
 				else
 				{
-					DrawTexture(negativeExit, Gameplay::screenWidth / 2 - exit.width / 2, Gameplay::screenHeight / 2 + exit.height + 5, WHITE);
+					DrawTexture(negativeExit, screenWidth / 2 - exit.width / 2, screenHeight / 2 + exit.height + 5, WHITE);
 				}
 			}
 		}
@@ -592,7 +545,7 @@ namespace GameInit
 			//Colision meteoro-player
 			for (int i = 0; i < TOTAL_METEOR; i++)
 			{
-				player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(shipHeight /3/ 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(shipHeight/3 / 2.5f), 12 };
+				player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(dragonHeight /3/ 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(dragonHeight/3 / 2.5f), 12 };
 				
 			//	if (CheckCollisionCircleRec(Vector2{ player.collider.x, player.collider.y }, player.collider.z,enemi))
 				if (CheckCollisionRecs(rec,enemi)|| CheckCollisionRecs(rec, enemi2))
@@ -668,7 +621,7 @@ namespace GameInit
 				screen = WIN;
 				initMeteor(meteor);
 				points = INIT_SCORE;
-				player.position = Vector2{ 200.0f, (float)screenHeight / 3 - shipHeight / 3 };
+				player.position = Vector2{ 200.0f, (float)screenHeight / 3 - dragonHeight / 3 };
 				player.rotation = 0;
 			}
 		}
@@ -677,7 +630,7 @@ namespace GameInit
 			screen = DEFEAT;
 			initMeteor(meteor);
 			points = INIT_SCORE;
-			player.position = Vector2{ 200.0f, (float)screenHeight / 3 - shipHeight / 3 };
+			player.position = Vector2{ 200.0f, (float)screenHeight / 3 - dragonHeight / 3 };
 			player.rotation = 0;
 
 		}

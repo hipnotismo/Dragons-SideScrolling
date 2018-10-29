@@ -1,6 +1,6 @@
 #ifndef WIN_H
 #define WIN_H
-namespace GameInit
+namespace Game
 {
 	namespace initWin
 	{

@@ -7,8 +7,8 @@
 #include "screen\Gameplay\gameplay.h"
 #include "screen\Credits\credits.h"
 #include "screen\Defeat\defeat.h"
-//#define MUSIC_ON
-namespace GameInit
+#define MUSIC_ON
+namespace Game
 {
 	static void Init();
 	static void Update();
@@ -17,9 +17,11 @@ namespace GameInit
 	bool endGame = false;
 	Texture2D texture;
 	Music MusicLoop;
+	int screenWidth = 600;
+	int screenHeight = 800;
 	void Init() 
 	{
-		InitWindow(Gameplay::screenWidth, Gameplay::screenHeight, "Asteroids");
+		InitWindow(screenWidth, screenHeight, "Dragons");
 #ifdef MUSIC_ON
 		InitAudioDevice();
 		MusicLoop = LoadMusicStream("res/music.ogg");
@@ -112,7 +114,6 @@ namespace GameInit
 			Draw();
 		}
 		//--------------------------------------------------------------------------------------   
-	
 		Close();
 		// Close window and OpenGL context
 		//--------------------------------------------------------------------------------------

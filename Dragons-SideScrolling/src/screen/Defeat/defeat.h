@@ -1,6 +1,6 @@
 #ifndef DEFEAT_H
 #define DEFEAT_H
-namespace GameInit
+namespace Game
 {
 	namespace initDefeat
 	{

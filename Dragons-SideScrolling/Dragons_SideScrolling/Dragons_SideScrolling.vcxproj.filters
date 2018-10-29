@@ -17,11 +17,11 @@
     <ClCompile Include="..\src\screen\Menu\menu.cpp">
       <Filter>Screen\Menu</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Logic\mov_ship.cpp">
-      <Filter>Logic</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\screen\Win\win.cpp">
       <Filter>Screen\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Logic\mov_dragon.cpp">
+      <Filter>Logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -40,11 +40,11 @@
     <ClInclude Include="..\src\screen\Menu\menu.h">
       <Filter>Screen\Menu</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Logic\mov_ship.h">
-      <Filter>Logic</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\screen\Win\win.h">
       <Filter>Screen\Win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Logic\mov_dragon.h">
+      <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

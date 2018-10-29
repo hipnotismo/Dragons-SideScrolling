@@ -1,6 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
-namespace GameInit
+namespace Game
 {
 	enum Screen
 	{
@@ -13,6 +13,8 @@ namespace GameInit
 	extern Screen screen;
 	extern bool music;
 	extern bool endGame;
+	extern int screenWidth;
+	extern int screenHeight;
 	//---------------------------------------------
 	void LoadScreen();
 	//---------------------------------------------
