@@ -34,7 +34,7 @@ namespace Game
 			LimitRight,
 			LimitLeft
 		};
-		struct Meteor {
+		struct Enemi {
 			Texture2D meteor_texture;
 			float x;
 			float y;
@@ -81,11 +81,11 @@ namespace Game
 		static bool pauseButtonAnimationOn;
 		static bool menuButtonAnimationOn;
 		static bool exitButtonAnimationOn;
-		static void initMeteor(Meteor meteor[]);
-		static void drawMeteor(Meteor meteor[]);
-		static void checkColisionMeteor(Meteor meteor[]);
-		static void movMeteor(Meteor meteor[]);
-		static void instanceThisMeteor(Meteor meteor[], int thisMeteor);
+		static void initEnemi(Enemi _enemi[]);
+		static void drawEnemi(Enemi _enemi[]);
+		static void checkColisionEnemi(Enemi _enemi[]);
+		static void movEnemi(Enemi _enemi[]);
+		static void instanceThisEnemi(Enemi _enemi[], int thisEnemi);
 		static void victory();
 		static void defeat();
 		// Initialization
@@ -93,9 +93,8 @@ namespace Game
 	
 		float time = 0;
 		static int checkGame = 1;
-		static const int TOTAL_METEOR = 2;
-		static Rectangle box2;
-		static Meteor meteor[TOTAL_METEOR];
+		static const int TOTAL_ENEMI = 2;
+		static Enemi _enemi[TOTAL_ENEMI];
 		static short int INIT_VELOCITY = 400;
 		static short int randomMusic = 0;
 		static const short int MAX_POINT = 5;
@@ -200,7 +199,7 @@ namespace Game
 			player.color = LIGHTGRAY;
 			player.frameRec = { 0.0f, 0.0f, (float)player.player_texture.width /3, (float)player.player_texture.height };
 			//--------------------------------
-			initMeteor(meteor);
+			initEnemi(_enemi);
 			menu = LoadTexture("res/boton_menu.png");
 			negativeMenu = LoadTexture("res/boton_menu2.png");
 			exit = LoadTexture("res/exit.png");
@@ -248,7 +247,7 @@ namespace Game
 			}
 			
 			//---------------------------------------------- Colision piso
-			for (int i = 0; i < TOTAL_METEOR; i++)
+			for (int i = 0; i < TOTAL_ENEMI; i++)
 			{
 				if (i == 1)
 				{
@@ -290,15 +289,15 @@ namespace Game
 				}
 
 			}
-			for (int i = 0; i < TOTAL_METEOR; i++) 
+			for (int i = 0; i < TOTAL_ENEMI; i++)
 			{	
 				if (i == 1) 
 				{
-					enemi = { (float)meteor[i].x - (float)meteor[0].meteor_texture.width / 2,(float)meteor[i].y - (float)meteor[0].meteor_texture.height / 2,(float)meteor[0].meteor_texture.width,(float)meteor[0].meteor_texture.height };
+					enemi = { (float)_enemi[i].x - (float)_enemi[0].meteor_texture.width / 2,(float)_enemi[i].y - (float)_enemi[0].meteor_texture.height / 2,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
 				}
 				else 
 				{
-					enemi2 = { (float)meteor[i].x - (float)meteor[0].meteor_texture.width / 2,(float)meteor[i].y - (float)meteor[0].meteor_texture.height / 2,(float)meteor[0].meteor_texture.width,(float)meteor[0].meteor_texture.height };
+					enemi2 = { (float)_enemi[i].x - (float)_enemi[0].meteor_texture.width / 2,(float)_enemi[i].y - (float)_enemi[0].meteor_texture.height / 2,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
 				}
 			}
 		
@@ -326,24 +325,24 @@ namespace Game
 				}
 				//---------------------------------------------------------
 				//Meteor Movement
-				movMeteor(meteor);
+				movEnemi(_enemi);
 				//---------------------------------------------------------
 				//Bordes pantalla
-				for (int i = 0; i < TOTAL_METEOR; i++)
+				for (int i = 0; i < TOTAL_ENEMI; i++)
 				{
 					if (
-						meteor[i].x <= (0 - RADIUS_BALL * 4))
+						_enemi[i].x <= (0 - RADIUS_BALL * 4))
 					{
-						instanceThisMeteor(meteor, i);
+						instanceThisEnemi(_enemi, i);
 					}
 
 				}
 				//--------------------------------------------------------
 				//Colision barras/pelota
-				checkColisionMeteor(meteor);
-				for (int i = 0; i < TOTAL_METEOR; i++)
+				checkColisionEnemi(_enemi);
+				for (int i = 0; i < TOTAL_ENEMI; i++)
 				{
-					meteor[i].position = Vector2{ meteor[i].x, meteor[i].y };
+					_enemi[i].position = Vector2{ _enemi[i].x, _enemi[i].y };
 				}
 				//-------------------------------------------------------
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
@@ -378,9 +377,9 @@ namespace Game
 						animationDragonOn = false;
 					}				
 				}
-				for (int i = 0; i < TOTAL_METEOR; i++)
+				for (int i = 0; i < TOTAL_ENEMI; i++)
 				{
-					meteor[i].destRec = { meteor[i].x,meteor[i].y,(float)meteor[0].meteor_texture.width,(float)meteor[0].meteor_texture.height };
+					_enemi[i].destRec = { _enemi[i].x,_enemi[i].y,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
 				}
 				player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width/3,(float)player.player_texture.height };
 			}
@@ -390,7 +389,7 @@ namespace Game
 				{
 					if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 					{
-						initMeteor(meteor);
+						initEnemi(_enemi);
 						points = INIT_SCORE;
 						player.position = Vector2{ (float)halfScreenWidth, (float)screenHeight / 2 - dragonHeight / 2 };
 						player.rotation = 0;
@@ -435,7 +434,7 @@ namespace Game
 			}
 			//DrawTextureRec(player.player_texture, , player.position, WHITE);
 			DrawTexturePro(player.player_texture, player.frameRec, player.destRec, player.origin, player.rotation, WHITE);
-			drawMeteor(meteor);
+			drawEnemi(_enemi);
 			for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
 			{
 				if (shoot[i].active) DrawCircleV(shoot[i].position, shoot[i].radius, BLACK);
@@ -469,79 +468,79 @@ namespace Game
 				}
 			}
 		}
-		void initMeteor(Meteor meteor[])
+		void initEnemi(Enemi _enemi[])
 		{
-			meteor[0].meteor_texture = LoadTexture("res/meteor.png");
-			for (int i = 0; i < TOTAL_METEOR; i++)
+			_enemi[0].meteor_texture = LoadTexture("res/meteor.png");
+			for (int i = 0; i < TOTAL_ENEMI; i++)
 			{
 				if (i == 0) 
 				{
-					meteor[i].x_inicial = GetRandomValue(screenWidth + RADIUS_BALL, screenWidth * 2) + RADIUS_BALL;
+					_enemi[i].x_inicial = GetRandomValue(screenWidth + RADIUS_BALL, screenWidth * 2) + RADIUS_BALL;
 					if (i == 0)
 					{
-						meteor[i].x = meteor[i].x_inicial;
+						_enemi[i].x = _enemi[i].x_inicial;
 					}
 					else
 					{
-						meteor[i].x = meteor[i].x_inicial + meteor[0].meteor_texture.width;
+						_enemi[i].x = _enemi[i].x_inicial + _enemi[0].meteor_texture.width;
 					}
 
-					meteor[i].y = screenHeight - RADIUS_BALL + GetRandomValue(100, 600);
-					meteor[i].position = Vector2{ meteor[i].x, meteor[i].y };
-					meteor[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
-					meteor[i].radius = RADIUS_BALL;
-					meteor[i].active = true;
-					meteor[i].dir = (Direction)GetRandomValue(1, 8);
-					meteor[i].sourceRec = { 0.0f,0.0f,(float)meteor[0].meteor_texture.width,(float)meteor[0].meteor_texture.height };
-					meteor[i].destRec = { meteor[i].x,meteor[i].y,(float)meteor[0].meteor_texture.width,(float)meteor[0].meteor_texture.height };
-					meteor[i].origin = { (float)meteor[0].meteor_texture.width / 2,(float)meteor[0].meteor_texture.height / 2 };
+					_enemi[i].y = screenHeight - RADIUS_BALL + GetRandomValue(100, 600);
+					_enemi[i].position = Vector2{ _enemi[i].x, _enemi[i].y };
+					_enemi[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
+					_enemi[i].radius = RADIUS_BALL;
+					_enemi[i].active = true;
+					_enemi[i].dir = (Direction)GetRandomValue(1, 8);
+					_enemi[i].sourceRec = { 0.0f,0.0f,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
+					_enemi[i].destRec = { _enemi[i].x,_enemi[i].y,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
+					_enemi[i].origin = { (float)_enemi[0].meteor_texture.width / 2,(float)_enemi[0].meteor_texture.height / 2 };
 				}
 				else 
 				{
-					meteor[i].x = meteor[i-1].x;
-					meteor[i].y = meteor[0].y - screenHeight - 400;
-					meteor[i].position = Vector2{ meteor[i].x, meteor[i].y };
-					meteor[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
-					meteor[i].radius = RADIUS_BALL;
-					meteor[i].active = true;
-					meteor[i].dir = (Direction)GetRandomValue(1, 8);
-					meteor[i].sourceRec = { 0.0f,0.0f,(float)meteor[0].meteor_texture.width,(float)meteor[0].meteor_texture.height };
-					meteor[i].destRec = { meteor[i].x,meteor[i].y,(float)meteor[0].meteor_texture.width,(float)meteor[0].meteor_texture.height };
-					meteor[i].origin = { (float)meteor[0].meteor_texture.width / 2,(float)meteor[0].meteor_texture.height / 2 };
+					_enemi[i].x = _enemi[i-1].x;
+					_enemi[i].y = _enemi[0].y - screenHeight - 400;
+					_enemi[i].position = Vector2{ _enemi[i].x, _enemi[i].y };
+					_enemi[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
+					_enemi[i].radius = RADIUS_BALL;
+					_enemi[i].active = true;
+					_enemi[i].dir = (Direction)GetRandomValue(1, 8);
+					_enemi[i].sourceRec = { 0.0f,0.0f,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
+					_enemi[i].destRec = { _enemi[i].x,_enemi[i].y,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
+					_enemi[i].origin = { (float)_enemi[0].meteor_texture.width / 2,(float)_enemi[0].meteor_texture.height / 2 };
 				}
 				
 
 			}
 		}
-		static void drawMeteor(Meteor meteor[])
+		static void drawEnemi(Enemi _enemi[])
 		{
-			for (int i = 0; i < TOTAL_METEOR; i++)
+			for (int i = 0; i < TOTAL_ENEMI; i++)
 			{
 				if (i == 0) 
 				{
-					DrawTexturePro(meteor[0].meteor_texture, meteor[i].sourceRec, meteor[i].destRec, meteor[i].origin, 0.0f, WHITE);
+					DrawTexturePro(_enemi[0].meteor_texture, _enemi[i].sourceRec, _enemi[i].destRec, _enemi[i].origin, 0.0f, WHITE);
 					//DrawRectangleRec(enemi2, BLACK);
 				}
 				else
 				{
-					DrawTexturePro(meteor[0].meteor_texture, meteor[i].sourceRec, meteor[i].destRec, meteor[i].origin, 180.0f, WHITE);
+					DrawTexturePro(_enemi[0].meteor_texture, _enemi[i].sourceRec, _enemi[i].destRec, _enemi[i].origin, 180.0f, WHITE);
 					//DrawRectangleRec(enemi, BLACK);
 				}
 		
 			}
 		}
-		static void checkColisionMeteor(Meteor meteor[])
+		static void checkColisionEnemi(Enemi _enemi[])
 		{
 			//---------------------------------------------------------
 			//Colision meteoro-player
-			for (int i = 0; i < TOTAL_METEOR; i++)
+			for (int i = 0; i < TOTAL_ENEMI; i++)
 			{
 				player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(dragonHeight /3/ 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(dragonHeight/3 / 2.5f), 12 };
 				
 			//	if (CheckCollisionCircleRec(Vector2{ player.collider.x, player.collider.y }, player.collider.z,enemi))
 				if (CheckCollisionRecs(rec,enemi)|| CheckCollisionRecs(rec, enemi2))
 				{
-					instanceThisMeteor(meteor, i);
+					instanceThisEnemi(_enemi, i);
 				
 #ifdef MUSIC_ON
 					if (music)
@@ -568,28 +567,28 @@ namespace Game
 
 			}
 		}
-		static void movMeteor(Meteor meteor[])
+		static void movEnemi(Enemi _enemi[])
 		{
-			for (int i = 0; i < TOTAL_METEOR; i++)
+			for (int i = 0; i < TOTAL_ENEMI; i++)
 			{
-				meteor[i].x -= velocity * GetFrameTime();
+				_enemi[i].x -= velocity * GetFrameTime();
 			}
 		}
-		static void instanceThisMeteor(Meteor meteor[], int thisMeteor)
+		static void instanceThisEnemi(Enemi _enemi[], int thisMeteor)
 		{
 			
 
-			meteor[thisMeteor].x_inicial = GetRandomValue(screenWidth + RADIUS_BALL, screenWidth * 2) + RADIUS_BALL;
+			_enemi[thisMeteor].x_inicial = GetRandomValue(screenWidth + RADIUS_BALL, screenWidth * 2) + RADIUS_BALL;
 			if (thisMeteor == 0)
 			{
-				meteor[thisMeteor].x = meteor[thisMeteor].x_inicial;
-				meteor[thisMeteor].y = screenHeight - RADIUS_BALL + GetRandomValue(100, 600);
+				_enemi[thisMeteor].x = _enemi[thisMeteor].x_inicial;
+				_enemi[thisMeteor].y = screenHeight - RADIUS_BALL + GetRandomValue(100, 600);
 			}
 			else
 			{
-				meteor[thisMeteor].x = meteor[0].x_inicial;
-				meteor[thisMeteor].y =  meteor[0].y - screenHeight  - 300 ;
-				//meteor[thisMeteor].x = meteor[thisMeteor].x_inicial + meteor[thisMeteor - 1].x_inicial/3 + meteor[thisMeteor].meteor_texture.width;
+				_enemi[thisMeteor].x = _enemi[0].x_inicial;
+				_enemi[thisMeteor].y =  _enemi[0].y - screenHeight  - 300 ;
+				//_enemi[thisMeteor].x = _enemi[thisMeteor].x_inicial + _enemi[thisMeteor - 1].x_inicial/3 + _enemi[thisMeteor].meteor_texture.width;
 			}
 			
 		}
@@ -598,7 +597,7 @@ namespace Game
 			if (points >= MAX_POINT)
 			{
 				screen = WIN;
-				initMeteor(meteor);
+				initEnemi(_enemi);
 				points = INIT_SCORE;
 				player.position = Vector2{ 200.0f, (float)screenHeight / 3 - dragonHeight / 3 };
 				player.rotation = 0;
@@ -607,7 +606,7 @@ namespace Game
 		static void defeat()
 		{
 			screen = DEFEAT;
-			initMeteor(meteor);
+			initEnemi(_enemi);
 			points = INIT_SCORE;
 			player.position = Vector2{ 200.0f, (float)screenHeight / 3 - dragonHeight / 3 };
 			player.rotation = 0;
