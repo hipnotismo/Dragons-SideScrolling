@@ -6,6 +6,7 @@ namespace Game
 	{
 		void UpdateCredits();
 		void DrawCredits();
+		void drawEnemi();
 	}
 
 }

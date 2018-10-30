@@ -67,7 +67,7 @@ namespace Game
 			static int fontSizeTitle = 50;
 			static int fontSize = 20;
 			DrawTexture(fond, 0, 0, WHITE);
-			DrawText("You Lose!", halfScreenWidth - (MeasureText("You Lose!", fontSizeTitle) / 2), screenHeight /4, fontSizeTitle, GOLD);
+			DrawText("You Lose!", halfScreenWidth - (MeasureText("You Lose!", fontSizeTitle) / 2), screenHeight /3, fontSizeTitle, GOLD);
 			if (menuButtonAnimationOn)
 			{
 				DrawTexture(menu, halfScreenWidth - menu.width / 2, screenHeight / 2, WHITE);

@@ -138,12 +138,13 @@ namespace Game
 			{
 				DrawTexture(negativeExit, halfScreenWidth - exit.width / 2, screenHeight / 2 + exit.height * 3 + 5, WHITE);
 			}
-			DrawText("v0.2", screenWidth -(screenWidth/100*5)- (MeasureText("v0.1", 25) / 2),screenHeight - screenHeight / 20, 25, BLACK);
+			DrawText("v1.0", screenWidth -(screenWidth/100*5)- (MeasureText("v1.0", 25) / 2),screenHeight - screenHeight / 20, 25, BLACK);
 			if (settings)
 			{
 				DrawRectangle(halfScreenWidth - (MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) / 2) - 5, screenHeight - screenHeight / 3, MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) + 10, fontSize * 3 + 15, GRAY);
 				DrawRectangleLines(halfScreenWidth - (MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) / 2) - 5, screenHeight - screenHeight / 3, MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) + 10, fontSize * 3 + 15, GOLD);
-				DrawText("RightClick -> Up", halfScreenWidth  - (MeasureText("RightClick -> Move", fontSize) / 2), screenHeight - screenHeight / 3 + fontSize+ 5, fontSize, WHITE);
+				DrawText("RightClick -> Up", halfScreenWidth  - (MeasureText("RightClick -> up", fontSize) / 2), screenHeight - screenHeight / 3 + fontSize+ 5, fontSize, WHITE);
+				DrawText("Win-> 15 Points", halfScreenWidth - (MeasureText("Win-> 15 Points", fontSize) / 2), screenHeight - screenHeight / 3 + fontSize *2 + 5, fontSize, WHITE);
 				if (quitButtonAnimationOn)
 				{
 					DrawTexture(quit, screenWidth - (screenWidth / 100 * 25) , screenHeight / 2 + help.height +help.height/2 , WHITE);

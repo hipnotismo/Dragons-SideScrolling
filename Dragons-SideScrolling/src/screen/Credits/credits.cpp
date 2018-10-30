@@ -59,7 +59,7 @@ namespace Game
 			DrawText("Programmer: Cusumano Cristian", halfScreenWidth - (MeasureText("Programmer: Cusumano Cristian", fontSize) / 2), positionY , fontSize, GOLD);
 			DrawText("Art, Music and Efects By: Cusumano Cristian", halfScreenWidth - (MeasureText("Music and Efects By: Cusumano Cristian", fontSize) / 2), positionY + fontSize*2 + 5, fontSize, GOLD);
 			DrawText("Tools: Raylib - BoscaCeoil - MusicMaker - Photoshop",halfScreenWidth - (MeasureText("Tools: Raylib - BoscaCeoil - MusicMaker - Photoshop", fontSize) / 2), positionY + fontSize * 4 + 5, fontSize, GOLD);
-			DrawText("v0.2", halfScreenWidth - (MeasureText("v0.1", fontSize) / 2), positionY + fontSize * 13 + 5, fontSize, GOLD);
+			DrawText("v1.0", halfScreenWidth - (MeasureText("v1.0", fontSize) / 2), positionY + fontSize * 13 + 5, fontSize, GOLD);
 		}
 	}
 }

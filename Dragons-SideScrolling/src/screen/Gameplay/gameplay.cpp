@@ -10,7 +10,7 @@
 #include <iostream>
 using namespace std;
 
-//#define MUSIC_ON
+#define MUSIC_ON
 namespace Game
 {
 	Screen screen = MENU;
@@ -35,7 +35,7 @@ namespace Game
 			LimitLeft
 		};
 		struct Enemi {
-			Texture2D meteor_texture;
+			Texture2D tube_texture;
 			float x;
 			float y;
 			float x_inicial;
@@ -72,6 +72,7 @@ namespace Game
 		Texture2D negativeExit;
 		Texture2D menu;
 		Texture2D negativeMenu;
+
 		Texture2D fond_black;
 		Rectangle recMenu;
 		Texture2D boton_pause;
@@ -90,13 +91,13 @@ namespace Game
 		// Initialization
 		//-------------------------------------------- Statics
 
-		float time = 0;
+		static float time = 0;
 		static int checkGame = 1;
 		static const int TOTAL_ENEMI = 2;
 		static Enemi _enemi[TOTAL_ENEMI];
 		static short int INIT_VELOCITY = 400;
 		static short int randomMusic = 0;
-		static const short int MAX_POINT = 5;
+		static const short int MAX_POINT = 15;
 		static const short int HEIGHT_BOX = (screenHeight / 15);
 		static const short int WIDTH_BOX = (screenWidth / 25);
 		static const short int RADIUS_BALL = (150);
@@ -128,6 +129,7 @@ namespace Game
 		static Fondo piso[2];
 		static Rectangle rec;
 		static bool animationDragonOn;
+		static bool colect = true;
 		Player player;
 
 		//--------------------------------------------
@@ -149,8 +151,7 @@ namespace Game
 				}
 				else
 				{
-					fondo[i].fond = LoadTexture("res/fondo.png");
-					fondo[i].x = fondo[i].fond.width;
+					fondo[i].x = fondo[0].fond.width;
 					fondo[i].y = 0;
 					fondo[i].position = Vector2{ 0.0f,0.0f };
 					fondo[i].speed = Vector2{ 0, 0 };
@@ -169,7 +170,7 @@ namespace Game
 				}
 				else
 				{
-					piso[i].x = fondo[i].fond.width;
+					piso[i].x = fondo[0].fond.width;
 					piso[i].y = screenHeight - piso[0].fond.height;;
 					piso[i].position = Vector2{ 0.0f,0.0f };
 					piso[i].speed = Vector2{ 0, 0 };
@@ -215,9 +216,34 @@ namespace Game
 
 		void updateGame()
 		{
-
 			if (!pause)
 			{
+				if (player.position.x >  _enemi[0].position.x && colect)
+				{
+					points++;
+					colect = !colect;
+#ifdef MUSIC_ON
+					if (music)
+					{
+						randomMusic = GetRandomValue(1, 4);
+						switch (randomMusic) {
+						case 1:
+							PlaySound(fxWav);
+							break;
+						case 2:
+							PlaySound(fxWav2);
+							break;
+						case 3:
+							PlaySound(fxWav3);
+							break;
+						case 4:
+							PlaySound(fxWav4);
+							break;
+						}
+
+					}
+#endif					
+				}
 				for (int i = 0; i < 2; i++)
 				{
 
@@ -227,9 +253,9 @@ namespace Game
 				for (int i = 0; i < 2; i++)
 				{
 					fondo[i].x -= velocity / 4 * GetFrameTime();
-					if (fondo[i].x <= -fondo[i].fond.width)
+					if (fondo[i].x <= -fondo[0].fond.width)
 					{
-						fondo[i].x = (int)fondo[i].fond.width;
+						fondo[i].x = (int)fondo[0].fond.width;
 					}
 				}
 				for (int i = 0; i < 2; i++)
@@ -261,32 +287,9 @@ namespace Game
 				}
 				for (int i = 0; i < 2; i++)
 				{
-					player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), 12 };
-
-					//	if (CheckCollisionCircleRec(Vector2{ player.collider.x, player.collider.y }, player.collider.z,enemi))
 					if (CheckCollisionRecs(rec, pisoenemi) || CheckCollisionRecs(rec, piso2))
 					{
-#ifdef MUSIC_ON
-						if (music)
-						{
-							randomMusic = GetRandomValue(1, 4);
-							switch (randomMusic) {
-							case 1:
-								PlaySound(fxWav);
-								break;
-							case 2:
-								PlaySound(fxWav2);
-								break;
-							case 3:
-								PlaySound(fxWav3);
-								break;
-							case 4:
-								PlaySound(fxWav4);
-								break;
-							}
-						}
-#endif
-						defeat();
+							defeat();
 					}
 
 				}
@@ -294,15 +297,16 @@ namespace Game
 				{
 					if (i == 1)
 					{
-						enemi = { (float)_enemi[i].x - (float)_enemi[0].meteor_texture.width / 2,(float)_enemi[i].y - (float)_enemi[0].meteor_texture.height / 2,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
+						enemi = { (float)_enemi[i].x - (float)_enemi[0].tube_texture.width / 2,(float)_enemi[i].y - (float)_enemi[0].tube_texture.height / 2,(float)_enemi[0].tube_texture.width,(float)_enemi[0].tube_texture.height };
 					}
 					else
 					{
-						enemi2 = { (float)_enemi[i].x - (float)_enemi[0].meteor_texture.width / 2,(float)_enemi[i].y - (float)_enemi[0].meteor_texture.height / 2,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
+						enemi2 = { (float)_enemi[i].x - (float)_enemi[0].tube_texture.width / 2,(float)_enemi[i].y - (float)_enemi[0].tube_texture.height / 2,(float)_enemi[0].tube_texture.width,(float)_enemi[0].tube_texture.height };
 					}
 				}
 
 				rec = { (float)player.position.x - (float)player.player_texture.width / 3 / 2,(float)player.position.y - (float)player.player_texture.height, (float)player.player_texture.width / 3, (float)player.player_texture.height };
+
 				if (CheckCollisionPointRec(GetMousePosition(), recPause))
 				{
 					if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
@@ -333,11 +337,11 @@ namespace Game
 						_enemi[i].x <= (0 - RADIUS_BALL * 4))
 					{
 						instanceThisEnemi(_enemi, i);
+						colect =true;
 					}
 
 				}
 				//--------------------------------------------------------
-				//Colision barras/pelota
 				checkColisionEnemi(_enemi);
 				for (int i = 0; i < TOTAL_ENEMI; i++)
 				{
@@ -378,7 +382,7 @@ namespace Game
 				}
 				for (int i = 0; i < TOTAL_ENEMI; i++)
 				{
-					_enemi[i].destRec = { _enemi[i].x,_enemi[i].y,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
+					_enemi[i].destRec = { _enemi[i].x,_enemi[i].y,(float)_enemi[0].tube_texture.width,(float)_enemi[0].tube_texture.height };
 				}
 				player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width / 3,(float)player.player_texture.height };
 			}
@@ -468,7 +472,7 @@ namespace Game
 		}
 		void initEnemi(Enemi _enemi[])
 		{
-			_enemi[0].meteor_texture = LoadTexture("res/meteor.png");
+			_enemi[0].tube_texture = LoadTexture("res/tube.png");
 			for (int i = 0; i < TOTAL_ENEMI; i++)
 			{
 				if (i == 0)
@@ -480,7 +484,7 @@ namespace Game
 					}
 					else
 					{
-						_enemi[i].x = _enemi[i].x_inicial + _enemi[0].meteor_texture.width;
+						_enemi[i].x = _enemi[i].x_inicial + _enemi[0].tube_texture.width;
 					}
 
 					_enemi[i].y = screenHeight - RADIUS_BALL + GetRandomValue(100, 600);
@@ -489,9 +493,9 @@ namespace Game
 					_enemi[i].radius = RADIUS_BALL;
 					_enemi[i].active = true;
 					_enemi[i].dir = (Direction)GetRandomValue(1, 8);
-					_enemi[i].sourceRec = { 0.0f,0.0f,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
-					_enemi[i].destRec = { _enemi[i].x,_enemi[i].y,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
-					_enemi[i].origin = { (float)_enemi[0].meteor_texture.width / 2,(float)_enemi[0].meteor_texture.height / 2 };
+					_enemi[i].sourceRec = { 0.0f,0.0f,(float)_enemi[0].tube_texture.width,(float)_enemi[0].tube_texture.height };
+					_enemi[i].destRec = { _enemi[i].x,_enemi[i].y,(float)_enemi[0].tube_texture.width,(float)_enemi[0].tube_texture.height };
+					_enemi[i].origin = { (float)_enemi[0].tube_texture.width / 2,(float)_enemi[0].tube_texture.height / 2 };
 				}
 				else
 				{
@@ -502,9 +506,9 @@ namespace Game
 					_enemi[i].radius = RADIUS_BALL;
 					_enemi[i].active = true;
 					_enemi[i].dir = (Direction)GetRandomValue(1, 8);
-					_enemi[i].sourceRec = { 0.0f,0.0f,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
-					_enemi[i].destRec = { _enemi[i].x,_enemi[i].y,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
-					_enemi[i].origin = { (float)_enemi[0].meteor_texture.width / 2,(float)_enemi[0].meteor_texture.height / 2 };
+					_enemi[i].sourceRec = { 0.0f,0.0f,(float)_enemi[0].tube_texture.width,(float)_enemi[0].tube_texture.height };
+					_enemi[i].destRec = { _enemi[i].x,_enemi[i].y,(float)_enemi[0].tube_texture.width,(float)_enemi[0].tube_texture.height };
+					_enemi[i].origin = { (float)_enemi[0].tube_texture.width / 2,(float)_enemi[0].tube_texture.height / 2 };
 				}
 
 
@@ -516,12 +520,12 @@ namespace Game
 			{
 				if (i == 0)
 				{
-					DrawTexturePro(_enemi[0].meteor_texture, _enemi[i].sourceRec, _enemi[i].destRec, _enemi[i].origin, 0.0f, WHITE);
+					DrawTexturePro(_enemi[0].tube_texture, _enemi[i].sourceRec, _enemi[i].destRec, _enemi[i].origin, 0.0f, WHITE);
 					//DrawRectangleRec(enemi2, BLACK);
 				}
 				else
 				{
-					DrawTexturePro(_enemi[0].meteor_texture, _enemi[i].sourceRec, _enemi[i].destRec, _enemi[i].origin, 180.0f, WHITE);
+					DrawTexturePro(_enemi[0].tube_texture, _enemi[i].sourceRec, _enemi[i].destRec, _enemi[i].origin, 180.0f, WHITE);
 					//DrawRectangleRec(enemi, BLACK);
 				}
 
@@ -530,36 +534,12 @@ namespace Game
 		static void checkColisionEnemi(Enemi _enemi[])
 		{
 			//---------------------------------------------------------
-			//Colision meteoro-player
+			//Colision
 			for (int i = 0; i < TOTAL_ENEMI; i++)
 			{
-				player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), 12 };
-
-				//	if (CheckCollisionCircleRec(Vector2{ player.collider.x, player.collider.y }, player.collider.z,enemi))
 				if (CheckCollisionRecs(rec, enemi) || CheckCollisionRecs(rec, enemi2))
 				{
 					instanceThisEnemi(_enemi, i);
-
-#ifdef MUSIC_ON
-					if (music)
-					{
-						randomMusic = GetRandomValue(1, 4);
-						switch (randomMusic) {
-						case 1:
-							PlaySound(fxWav);
-							break;
-						case 2:
-							PlaySound(fxWav2);
-							break;
-						case 3:
-							PlaySound(fxWav3);
-							break;
-						case 4:
-							PlaySound(fxWav4);
-							break;
-						}
-					}
-#endif
 					defeat();
 				}
 
@@ -572,21 +552,21 @@ namespace Game
 				_enemi[i].x -= velocity * GetFrameTime();
 			}
 		}
-		static void instanceThisEnemi(Enemi _enemi[], int thisMeteor)
+		static void instanceThisEnemi(Enemi _enemi[], int thisTube)
 		{
 
 
-			_enemi[thisMeteor].x_inicial = GetRandomValue(screenWidth + RADIUS_BALL, screenWidth * 2) + RADIUS_BALL;
-			if (thisMeteor == 0)
+			_enemi[thisTube].x_inicial = GetRandomValue(screenWidth + RADIUS_BALL, screenWidth * 2) + RADIUS_BALL;
+			if (thisTube == 0)
 			{
-				_enemi[thisMeteor].x = _enemi[thisMeteor].x_inicial;
-				_enemi[thisMeteor].y = screenHeight - RADIUS_BALL + GetRandomValue(100, 600);
+				_enemi[thisTube].x = _enemi[thisTube].x_inicial;
+				_enemi[thisTube].y = screenHeight - RADIUS_BALL + GetRandomValue(100, 600);
 			}
 			else
 			{
-				_enemi[thisMeteor].x = _enemi[0].x_inicial;
-				_enemi[thisMeteor].y = _enemi[0].y - screenHeight - 300;
-				//_enemi[thisMeteor].x = _enemi[thisMeteor].x_inicial + _enemi[thisMeteor - 1].x_inicial/3 + _enemi[thisMeteor].meteor_texture.width;
+				_enemi[thisTube].x = _enemi[0].x_inicial;
+				_enemi[thisTube].y = _enemi[0].y - screenHeight - 300;
+				//_enemi[thisTube].x = _enemi[thisTube].x_inicial + _enemi[thisTube - 1].x_inicial/3 + _enemi[thisTube].tube_texture.width;
 			}
 
 		}
@@ -599,6 +579,7 @@ namespace Game
 				points = INIT_SCORE;
 				player.position = Vector2{ 200.0f, (float)screenHeight / 3 - dragonHeight / 3 };
 				player.rotation = 0;
+				colect = true;
 			}
 		}
 		static void defeat()
@@ -608,7 +589,7 @@ namespace Game
 			points = INIT_SCORE;
 			player.position = Vector2{ 200.0f, (float)screenHeight / 3 - dragonHeight / 3 };
 			player.rotation = 0;
-
+			colect = true;
 		}
 	}
 
