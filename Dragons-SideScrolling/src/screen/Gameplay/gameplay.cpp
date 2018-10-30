@@ -187,7 +187,7 @@ namespace Game
 			//--------------------------------
 
 			dragonHeight = (PLAYER_BASE_SIZE / 2) / tanf(20 * DEG2RAD) / 2;
-			player.player_texture = LoadTexture("res/Space_Ship.png");
+			player.player_texture = LoadTexture("res/dragon.png");
 			player.position = Vector2{ 200.0f, (float)screenHeight / 3 - dragonHeight / 3 };
 			player.speed = Vector2{ 0, 0 };
 			player.acceleration = 0;
