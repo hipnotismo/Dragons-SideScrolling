@@ -26,8 +26,7 @@ namespace Game
 			{
 				if (position_y > 0)
 				{
-					position_y = -100;
-
+					position_y -=400;
 				}
 			}
 			else

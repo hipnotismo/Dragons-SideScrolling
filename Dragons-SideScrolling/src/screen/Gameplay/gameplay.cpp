@@ -16,7 +16,7 @@ namespace Game
 	Screen screen = MENU;
 	namespace Gameplay
 	{
-		
+
 		enum Direction
 		{
 			Up = 1,
@@ -72,7 +72,6 @@ namespace Game
 		Texture2D negativeExit;
 		Texture2D menu;
 		Texture2D negativeMenu;
-		Texture2D asteroids;
 		Texture2D fond_black;
 		Rectangle recMenu;
 		Texture2D boton_pause;
@@ -90,7 +89,7 @@ namespace Game
 		static void defeat();
 		// Initialization
 		//-------------------------------------------- Statics
-	
+
 		float time = 0;
 		static int checkGame = 1;
 		static const int TOTAL_ENEMI = 2;
@@ -140,7 +139,7 @@ namespace Game
 		void initGame() {
 			for (int i = 0; i < 2; i++)
 			{
-				if (i == 0) 
+				if (i == 0)
 				{
 					fondo[i].x = 0;
 					fondo[i].y = 0;
@@ -162,9 +161,9 @@ namespace Game
 				piso[0].fond = LoadTexture("res/piso.png");
 				if (i == 0)
 				{
-					
+
 					piso[i].x = 0;
-					piso[i].y = screenHeight-piso[0].fond.height;
+					piso[i].y = screenHeight - piso[0].fond.height;
 					piso[i].position = Vector2{ 0.0f,0.0f };
 					piso[i].speed = Vector2{ 0, 0 };
 				}
@@ -176,7 +175,7 @@ namespace Game
 					piso[i].speed = Vector2{ 0, 0 };
 				}
 			}
-		
+
 #ifdef MUSIC_ON
 			fxWav = LoadSound("res/Blip_Select.wav");
 			fxWav2 = LoadSound("res/Blip_Select2.wav");
@@ -185,31 +184,30 @@ namespace Game
 #endif
 			velocity = INIT_VELOCITY;
 			//--------------------------------
-			
-			dragonHeight = (PLAYER_BASE_SIZE / 2) / tanf(20 * DEG2RAD) /2;
+
+			dragonHeight = (PLAYER_BASE_SIZE / 2) / tanf(20 * DEG2RAD) / 2;
 			player.player_texture = LoadTexture("res/Space_Ship.png");
 			player.position = Vector2{ 200.0f, (float)screenHeight / 3 - dragonHeight / 3 };
 			player.speed = Vector2{ 0, 0 };
 			player.acceleration = 0;
 			player.rotation = 0;
-			player.sourceRec = { 0.0f,0.0f,(float)player.player_texture.width/3,(float)player.player_texture.height };
-			player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width/3,(float)player.player_texture.height };
+			player.sourceRec = { 0.0f,0.0f,(float)player.player_texture.width / 3,(float)player.player_texture.height };
+			player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width / 3,(float)player.player_texture.height };
 			player.origin = { (float)player.player_texture.width / 3,(float)player.player_texture.height / 3 };
-			player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(dragonHeight/3 / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(dragonHeight/3 / 2.5f), 12 };
+			player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), 12 };
 			player.color = LIGHTGRAY;
-			player.frameRec = { 0.0f, 0.0f, (float)player.player_texture.width /3, (float)player.player_texture.height };
+			player.frameRec = { 0.0f, 0.0f, (float)player.player_texture.width / 3, (float)player.player_texture.height };
 			//--------------------------------
 			initEnemi(_enemi);
 			menu = LoadTexture("res/boton_menu.png");
 			negativeMenu = LoadTexture("res/boton_menu2.png");
-			exit = LoadTexture("res/exit.png");
-			negativeExit = LoadTexture("res/exit2.png");
+			exit = LoadTexture("res/return.png");
+			negativeExit = LoadTexture("res/return2.png");
 			fond_black = LoadTexture("res/fondo_oscuridad.png");
-			asteroids = LoadTexture("res/asteroids.png");
-			boton_pause= LoadTexture("res/pause.png");
-			negativePause= LoadTexture("res/pause2.png");
-			recMenu = { (float)halfScreenWidth  - menu.width / 2,(float)screenHeight / 2 ,(float)menu.width,(float)menu.height };
-			recExit = { (float)halfScreenWidth  - exit.width / 2,(float)screenHeight / 2 + exit.height + 5,(float)exit.width,(float)exit.height };
+			boton_pause = LoadTexture("res/pause.png");
+			negativePause = LoadTexture("res/pause2.png");
+			recMenu = { (float)halfScreenWidth - menu.width / 2,(float)screenHeight / 2 ,(float)menu.width,(float)menu.height };
+			recExit = { (float)halfScreenWidth - exit.width / 2,(float)screenHeight / 2 + exit.height + 5,(float)exit.width,(float)exit.height };
 			recPause = { (float)screenWidth - 100, (float)5,(float)boton_pause.width,(float)boton_pause.height };
 			animationDragonOn = false;
 		}
@@ -217,93 +215,94 @@ namespace Game
 
 		void updateGame()
 		{
-			for (int i = 0; i <	2; i++)
-			{
-				
-				fondo[i].position = Vector2{ fondo[i].x,fondo[i].y };
-				fondo[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
-			}
-			for (int i = 0; i <2; i++)
-			{
-				fondo[i].x -= velocity /4 * GetFrameTime();
-				if (fondo[i].x <= -fondo[i].fond.width)
-				{
-					fondo[i].x = (int)fondo[i].fond.width;
-				}
-			}
-			for (int i = 0; i < 2; i++)
-			{
 
-				piso[i].position = Vector2{ piso[i].x,piso[i].y };
-				piso[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
-			}
-			for (int i = 0; i <2; i++)
-			{
-				piso[i].x -= velocity * GetFrameTime();
-				if (piso[i].x <= -piso[0].fond.width)
-				{
-					piso[i].x = (int)piso[0].fond.width;
-				}
-			}
-			
-			//---------------------------------------------- Colision piso
-			for (int i = 0; i < TOTAL_ENEMI; i++)
-			{
-				if (i == 1)
-				{
-					pisoenemi = { (float)piso[i].x - (float)piso[0].fond.width / 2,(float)piso[i].y - (float)piso[0].fond.height / 2+50,(float)piso[0].fond.width,(float)piso[0].fond.height };
-				}
-				else
-				{
-					piso2 = { (float)piso[i].x - (float)piso[0].fond.width / 2,(float)piso[i].y - (float)piso[0].fond.height / 2 +50,(float)piso[0].fond.width,(float)piso[0].fond.height };
-				}
-			}
-			for (int i = 0; i < 2; i++)
-			{
-				player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), 12 };
-
-				//	if (CheckCollisionCircleRec(Vector2{ player.collider.x, player.collider.y }, player.collider.z,enemi))
-				if (CheckCollisionRecs(rec, pisoenemi) || CheckCollisionRecs(rec, piso2))
-				{
-#ifdef MUSIC_ON
-					if (music)
-					{
-						randomMusic = GetRandomValue(1, 4);
-						switch (randomMusic) {
-						case 1:
-							PlaySound(fxWav);
-							break;
-						case 2:
-							PlaySound(fxWav2);
-							break;
-						case 3:
-							PlaySound(fxWav3);
-							break;
-						case 4:
-							PlaySound(fxWav4);
-							break;
-						}
-					}
-#endif
-					defeat();
-				}
-
-			}
-			for (int i = 0; i < TOTAL_ENEMI; i++)
-			{	
-				if (i == 1) 
-				{
-					enemi = { (float)_enemi[i].x - (float)_enemi[0].meteor_texture.width / 2,(float)_enemi[i].y - (float)_enemi[0].meteor_texture.height / 2,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
-				}
-				else 
-				{
-					enemi2 = { (float)_enemi[i].x - (float)_enemi[0].meteor_texture.width / 2,(float)_enemi[i].y - (float)_enemi[0].meteor_texture.height / 2,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
-				}
-			}
-		
-			rec = { (float)player.position.x - (float)player.player_texture.width/3/2,(float)player.position.y- (float)player.player_texture.height, (float)player.player_texture.width / 3, (float)player.player_texture.height };
 			if (!pause)
 			{
+				for (int i = 0; i < 2; i++)
+				{
+
+					fondo[i].position = Vector2{ fondo[i].x,fondo[i].y };
+					fondo[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
+				}
+				for (int i = 0; i < 2; i++)
+				{
+					fondo[i].x -= velocity / 4 * GetFrameTime();
+					if (fondo[i].x <= -fondo[i].fond.width)
+					{
+						fondo[i].x = (int)fondo[i].fond.width;
+					}
+				}
+				for (int i = 0; i < 2; i++)
+				{
+
+					piso[i].position = Vector2{ piso[i].x,piso[i].y };
+					piso[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
+				}
+				for (int i = 0; i < 2; i++)
+				{
+					piso[i].x -= velocity * GetFrameTime();
+					if (piso[i].x <= -piso[0].fond.width)
+					{
+						piso[i].x = (int)piso[0].fond.width;
+					}
+				}
+
+				//---------------------------------------------- Colision piso
+				for (int i = 0; i < TOTAL_ENEMI; i++)
+				{
+					if (i == 1)
+					{
+						pisoenemi = { (float)piso[i].x - (float)piso[0].fond.width / 2,(float)piso[i].y - (float)piso[0].fond.height / 2 + 50,(float)piso[0].fond.width,(float)piso[0].fond.height };
+					}
+					else
+					{
+						piso2 = { (float)piso[i].x - (float)piso[0].fond.width / 2,(float)piso[i].y - (float)piso[0].fond.height / 2 + 50,(float)piso[0].fond.width,(float)piso[0].fond.height };
+					}
+				}
+				for (int i = 0; i < 2; i++)
+				{
+					player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), 12 };
+
+					//	if (CheckCollisionCircleRec(Vector2{ player.collider.x, player.collider.y }, player.collider.z,enemi))
+					if (CheckCollisionRecs(rec, pisoenemi) || CheckCollisionRecs(rec, piso2))
+					{
+#ifdef MUSIC_ON
+						if (music)
+						{
+							randomMusic = GetRandomValue(1, 4);
+							switch (randomMusic) {
+							case 1:
+								PlaySound(fxWav);
+								break;
+							case 2:
+								PlaySound(fxWav2);
+								break;
+							case 3:
+								PlaySound(fxWav3);
+								break;
+							case 4:
+								PlaySound(fxWav4);
+								break;
+							}
+						}
+#endif
+						defeat();
+					}
+
+				}
+				for (int i = 0; i < TOTAL_ENEMI; i++)
+				{
+					if (i == 1)
+					{
+						enemi = { (float)_enemi[i].x - (float)_enemi[0].meteor_texture.width / 2,(float)_enemi[i].y - (float)_enemi[0].meteor_texture.height / 2,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
+					}
+					else
+					{
+						enemi2 = { (float)_enemi[i].x - (float)_enemi[0].meteor_texture.width / 2,(float)_enemi[i].y - (float)_enemi[0].meteor_texture.height / 2,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
+					}
+				}
+
+				rec = { (float)player.position.x - (float)player.player_texture.width / 3 / 2,(float)player.position.y - (float)player.player_texture.height, (float)player.player_texture.width / 3, (float)player.player_texture.height };
 				if (CheckCollisionPointRec(GetMousePosition(), recPause))
 				{
 					if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
@@ -361,12 +360,12 @@ namespace Game
 							player.frameRec.x = (float)currentFrame*(float)player.player_texture.width / 3;
 						}
 					}
-					
+
 				}
 				else
 				{
-					time+=1*GetFrameTime();
-					if (time>0.5f) {
+					time += 1 * GetFrameTime();
+					if (time > 0.5f) {
 						time = 0;
 						if (framesCounter*GetFrameTime() >= (1 / framesSpeed))
 						{
@@ -375,15 +374,15 @@ namespace Game
 							player.frameRec.x = (float)currentFrame*(float)player.player_texture.width / 3;
 						}
 						animationDragonOn = false;
-					}				
+					}
 				}
 				for (int i = 0; i < TOTAL_ENEMI; i++)
 				{
 					_enemi[i].destRec = { _enemi[i].x,_enemi[i].y,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
 				}
-				player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width/3,(float)player.player_texture.height };
+				player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width / 3,(float)player.player_texture.height };
 			}
-			else 
+			else
 			{
 				if (CheckCollisionPointRec(GetMousePosition(), recMenu))
 				{
@@ -415,11 +414,11 @@ namespace Game
 				{
 					exitButtonAnimationOn = true;
 				}
-			}		
+			}
 		}
 		void DrawGame()
 		{
-		
+
 			for (int i = 0; i < 2; i++)
 			{
 				DrawTexture(fondo[0].fond, fondo[i].position.x, fondo[i].position.y, WHITE);
@@ -432,19 +431,18 @@ namespace Game
 				if (shoot[i].active) DrawCircleV(shoot[i].position, shoot[i].radius, BLACK);
 			}
 
-			DrawText(FormatText("%01i", points), (halfScreenWidth) - 20, screenHeight / 20, 30, LIGHTGRAY);
+			DrawText(FormatText("%01i", points), (halfScreenWidth)-20, screenHeight / 20, 30, LIGHTGRAY);
 			for (int i = 0; i < 2; i++)
 			{
 				DrawTexture(piso[0].fond, piso[i].position.x, piso[i].position.y, WHITE);
 			}
 
-			if (pause) 
+			if (pause)
 			{
 				DrawTexture(fond_black, 0, 0, WHITE);
-				DrawTexture(asteroids, 0, 0, WHITE);
 				if (menuButtonAnimationOn)
 				{
-					DrawTexture(menu,halfScreenWidth - menu.width / 2, screenHeight / 2, WHITE);
+					DrawTexture(menu, halfScreenWidth - menu.width / 2, screenHeight / 2, WHITE);
 				}
 				else
 				{
@@ -456,7 +454,7 @@ namespace Game
 				}
 				else
 				{
-					DrawTexture(negativeExit, halfScreenWidth  - exit.width / 2, screenHeight / 2 + exit.height + 5, WHITE);
+					DrawTexture(negativeExit, halfScreenWidth - exit.width / 2, screenHeight / 2 + exit.height + 5, WHITE);
 				}
 			}
 			if (pauseButtonAnimationOn)
@@ -473,7 +471,7 @@ namespace Game
 			_enemi[0].meteor_texture = LoadTexture("res/meteor.png");
 			for (int i = 0; i < TOTAL_ENEMI; i++)
 			{
-				if (i == 0) 
+				if (i == 0)
 				{
 					_enemi[i].x_inicial = GetRandomValue(screenWidth + RADIUS_BALL, screenWidth * 2) + RADIUS_BALL;
 					if (i == 0)
@@ -495,9 +493,9 @@ namespace Game
 					_enemi[i].destRec = { _enemi[i].x,_enemi[i].y,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
 					_enemi[i].origin = { (float)_enemi[0].meteor_texture.width / 2,(float)_enemi[0].meteor_texture.height / 2 };
 				}
-				else 
+				else
 				{
-					_enemi[i].x = _enemi[i-1].x;
+					_enemi[i].x = _enemi[i - 1].x;
 					_enemi[i].y = _enemi[0].y - screenHeight - 400;
 					_enemi[i].position = Vector2{ _enemi[i].x, _enemi[i].y };
 					_enemi[i].speed = Vector2{ SPEED_BALL_INIT, SPEED_BALL_INIT };
@@ -508,7 +506,7 @@ namespace Game
 					_enemi[i].destRec = { _enemi[i].x,_enemi[i].y,(float)_enemi[0].meteor_texture.width,(float)_enemi[0].meteor_texture.height };
 					_enemi[i].origin = { (float)_enemi[0].meteor_texture.width / 2,(float)_enemi[0].meteor_texture.height / 2 };
 				}
-				
+
 
 			}
 		}
@@ -516,7 +514,7 @@ namespace Game
 		{
 			for (int i = 0; i < TOTAL_ENEMI; i++)
 			{
-				if (i == 0) 
+				if (i == 0)
 				{
 					DrawTexturePro(_enemi[0].meteor_texture, _enemi[i].sourceRec, _enemi[i].destRec, _enemi[i].origin, 0.0f, WHITE);
 					//DrawRectangleRec(enemi2, BLACK);
@@ -526,7 +524,7 @@ namespace Game
 					DrawTexturePro(_enemi[0].meteor_texture, _enemi[i].sourceRec, _enemi[i].destRec, _enemi[i].origin, 180.0f, WHITE);
 					//DrawRectangleRec(enemi, BLACK);
 				}
-		
+
 			}
 		}
 		static void checkColisionEnemi(Enemi _enemi[])
@@ -535,13 +533,13 @@ namespace Game
 			//Colision meteoro-player
 			for (int i = 0; i < TOTAL_ENEMI; i++)
 			{
-				player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(dragonHeight /3/ 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(dragonHeight/3 / 2.5f), 12 };
-				
-			//	if (CheckCollisionCircleRec(Vector2{ player.collider.x, player.collider.y }, player.collider.z,enemi))
-				if (CheckCollisionRecs(rec,enemi)|| CheckCollisionRecs(rec, enemi2))
+				player.collider = Vector3{ player.position.x + sin(player.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), player.position.y - cos(player.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), 12 };
+
+				//	if (CheckCollisionCircleRec(Vector2{ player.collider.x, player.collider.y }, player.collider.z,enemi))
+				if (CheckCollisionRecs(rec, enemi) || CheckCollisionRecs(rec, enemi2))
 				{
 					instanceThisEnemi(_enemi, i);
-				
+
 #ifdef MUSIC_ON
 					if (music)
 					{
@@ -576,7 +574,7 @@ namespace Game
 		}
 		static void instanceThisEnemi(Enemi _enemi[], int thisMeteor)
 		{
-			
+
 
 			_enemi[thisMeteor].x_inicial = GetRandomValue(screenWidth + RADIUS_BALL, screenWidth * 2) + RADIUS_BALL;
 			if (thisMeteor == 0)
@@ -587,10 +585,10 @@ namespace Game
 			else
 			{
 				_enemi[thisMeteor].x = _enemi[0].x_inicial;
-				_enemi[thisMeteor].y =  _enemi[0].y - screenHeight  - 300 ;
+				_enemi[thisMeteor].y = _enemi[0].y - screenHeight - 300;
 				//_enemi[thisMeteor].x = _enemi[thisMeteor].x_inicial + _enemi[thisMeteor - 1].x_inicial/3 + _enemi[thisMeteor].meteor_texture.width;
 			}
-			
+
 		}
 		static void victory()
 		{

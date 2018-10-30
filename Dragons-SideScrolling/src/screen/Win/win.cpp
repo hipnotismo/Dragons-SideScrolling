@@ -27,8 +27,8 @@ namespace Game
 				firstInit = false;
 				menu = LoadTexture("res/boton_menu.png");
 				negativeMenu = LoadTexture("res/boton_menu2.png");
-				exit = LoadTexture("res/exit.png");
-				negativeExit = LoadTexture("res/exit2.png");
+				exit = LoadTexture("res/return.png");
+				negativeExit = LoadTexture("res/return2.png");
 				fond = LoadTexture("res/menu.png");
 				recMenu = { (float)halfScreenWidth - menu.width / 2,(float)screenHeight / 2 ,(float)menu.width,(float)menu.height };
 				recExit = { (float)halfScreenWidth - exit.width / 2,(float)screenHeight / 2 + exit.height + 5,(float)exit.width,(float)exit.height };
@@ -55,7 +55,7 @@ namespace Game
 
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 				{
-					Game::endGame = !Game::endGame;
+					screen = GAME;
 				}
 			}
 			else
