@@ -22,6 +22,7 @@
     <ClCompile Include="..\src\Game\game.cpp" />
     <ClCompile Include="..\src\Logic\mov_dragon.cpp" />
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\screen\Change\change.cpp" />
     <ClCompile Include="..\src\screen\Credits\credits.cpp" />
     <ClCompile Include="..\src\screen\Defeat\defeat.cpp" />
     <ClCompile Include="..\src\screen\Gameplay\gameplay.cpp" />
@@ -31,6 +32,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\Game\game.h" />
     <ClInclude Include="..\src\Logic\mov_dragon.h" />
+    <ClInclude Include="..\src\screen\Change\change.h" />
     <ClInclude Include="..\src\screen\Credits\credits.h" />
     <ClInclude Include="..\src\screen\Defeat\defeat.h" />
     <ClInclude Include="..\src\screen\Gameplay\gameplay.h" />
@@ -40,7 +42,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{639F082E-8ADD-4D52-997E-AF74BB4B2E94}</ProjectGuid>
     <RootNamespace>Pong_Project</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <ProjectName>Dragons-SideScrolling</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

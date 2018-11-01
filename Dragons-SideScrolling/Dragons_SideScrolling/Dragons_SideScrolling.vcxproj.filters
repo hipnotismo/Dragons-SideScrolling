@@ -23,6 +23,9 @@
     <ClCompile Include="..\src\Logic\mov_dragon.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\screen\Change\change.cpp">
+      <Filter>Screen\Change</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\screen\Credits\credits.h">
@@ -45,6 +48,9 @@
     </ClInclude>
     <ClInclude Include="..\src\Logic\mov_dragon.h">
       <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\screen\Change\change.h">
+      <Filter>Screen\Change</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +77,9 @@
     </Filter>
     <Filter Include="Screen\Win">
       <UniqueIdentifier>{9b401b77-6a4f-436f-93a5-1c7df796c21c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Screen\Change">
+      <UniqueIdentifier>{82d8cb68-3f8f-4c36-9b9c-9d8d6726e496}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -8,7 +8,8 @@ namespace Game
 		MENU,
 		WIN,
 		CREDITS,
-		DEFEAT
+		DEFEAT,
+		CHANGE
 	};
 	extern Screen screen;
 	extern bool music;

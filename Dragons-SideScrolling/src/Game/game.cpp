@@ -7,7 +7,8 @@
 #include "screen\Gameplay\gameplay.h"
 #include "screen\Credits\credits.h"
 #include "screen\Defeat\defeat.h"
-#define MUSIC_ON
+#include"screen/Change/change.h"
+//#define MUSIC_ON
 namespace Game
 {
 	static void Init();
@@ -63,6 +64,9 @@ namespace Game
 		case DEFEAT:
 			initDefeat::UpdateDefeat();
 			break;
+		case CHANGE:
+			initChange::UpdateChange();
+			break;
 		default:
 			break;
 		}
@@ -87,6 +91,9 @@ namespace Game
 			break;
 		case DEFEAT:
 			initDefeat::DrawDefeat();
+			break;
+		case CHANGE:
+			initChange::DrawChange();
 			break;
 		}
 		EndDrawing();
