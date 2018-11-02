@@ -15,6 +15,7 @@ namespace Game
 		void mov_dragon()
 		{
 			using namespace Gameplay;
+			//using namespace Gameplay_Two;
 			static float delta_y;
 			static float delta_x;
 			static float position_y = 0.0f;

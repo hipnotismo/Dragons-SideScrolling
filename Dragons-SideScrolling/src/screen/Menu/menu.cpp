@@ -144,6 +144,7 @@ namespace Game
 				DrawRectangle(halfScreenWidth - (MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) / 2) - 5, screenHeight - screenHeight / 3, MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) + 10, fontSize * 3 + 15, GRAY);
 				DrawRectangleLines(halfScreenWidth - (MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) / 2) - 5, screenHeight - screenHeight / 3, MeasureText(" Player 2: KeyUp -> Up / KeyDown -> Down ", fontSize) + 10, fontSize * 3 + 15, GOLD);
 				DrawText("RightClick -> Up", halfScreenWidth - (MeasureText("RightClick -> up", fontSize) / 2), screenHeight - screenHeight / 3 + fontSize + 5, fontSize, WHITE);
+				DrawText("Space -> Up", halfScreenWidth - (MeasureText("Space -> up", fontSize) / 2), screenHeight - screenHeight / 3 + fontSize + 5, fontSize, WHITE);
 				DrawText("Win-> 15 Points", halfScreenWidth - (MeasureText("Win-> 15 Points", fontSize) / 2), screenHeight - screenHeight / 3 + fontSize * 2 + 5, fontSize, WHITE);
 				if (quitButtonAnimationOn)
 				{

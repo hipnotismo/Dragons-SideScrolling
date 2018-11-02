@@ -9,7 +9,8 @@ namespace Game
 		WIN,
 		CREDITS,
 		DEFEAT,
-		CHANGE
+		CHANGE,
+		GAMETWO
 	};
 	extern Screen screen;
 	extern bool music;

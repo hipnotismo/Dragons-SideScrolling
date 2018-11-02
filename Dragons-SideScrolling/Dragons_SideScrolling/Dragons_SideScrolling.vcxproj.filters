@@ -26,6 +26,12 @@
     <ClCompile Include="..\src\screen\Change\change.cpp">
       <Filter>Screen\Change</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\screen\GameplayTwo\gameplay_two.cpp">
+      <Filter>Screen\GameplayTwo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Logic_Two\mov_dragons_two.cpp">
+      <Filter>Logic_Two</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\screen\Credits\credits.h">
@@ -51,6 +57,12 @@
     </ClInclude>
     <ClInclude Include="..\src\screen\Change\change.h">
       <Filter>Screen\Change</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\screen\GameplayTwo\gameplay_two.h">
+      <Filter>Screen\GameplayTwo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Logic_Two\mov_dragons_two.h">
+      <Filter>Logic_Two</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +92,12 @@
     </Filter>
     <Filter Include="Screen\Change">
       <UniqueIdentifier>{82d8cb68-3f8f-4c36-9b9c-9d8d6726e496}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Screen\GameplayTwo">
+      <UniqueIdentifier>{f74e8065-6c7f-48de-a060-af322b3e090a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logic_Two">
+      <UniqueIdentifier>{8f185b38-1550-42af-919e-c52befbf7f9b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

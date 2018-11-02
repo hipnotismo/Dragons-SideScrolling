@@ -21,10 +21,12 @@
   <ItemGroup>
     <ClCompile Include="..\src\Game\game.cpp" />
     <ClCompile Include="..\src\Logic\mov_dragon.cpp" />
+    <ClCompile Include="..\src\Logic_Two\mov_dragons_two.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\screen\Change\change.cpp" />
     <ClCompile Include="..\src\screen\Credits\credits.cpp" />
     <ClCompile Include="..\src\screen\Defeat\defeat.cpp" />
+    <ClCompile Include="..\src\screen\GameplayTwo\gameplay_two.cpp" />
     <ClCompile Include="..\src\screen\Gameplay\gameplay.cpp" />
     <ClCompile Include="..\src\screen\Menu\menu.cpp" />
     <ClCompile Include="..\src\screen\Win\win.cpp" />
@@ -32,9 +34,11 @@
   <ItemGroup>
     <ClInclude Include="..\src\Game\game.h" />
     <ClInclude Include="..\src\Logic\mov_dragon.h" />
+    <ClInclude Include="..\src\Logic_Two\mov_dragons_two.h" />
     <ClInclude Include="..\src\screen\Change\change.h" />
     <ClInclude Include="..\src\screen\Credits\credits.h" />
     <ClInclude Include="..\src\screen\Defeat\defeat.h" />
+    <ClInclude Include="..\src\screen\GameplayTwo\gameplay_two.h" />
     <ClInclude Include="..\src\screen\Gameplay\gameplay.h" />
     <ClInclude Include="..\src\screen\Menu\menu.h" />
     <ClInclude Include="..\src\screen\Win\win.h" />

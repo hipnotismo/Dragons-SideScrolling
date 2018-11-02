@@ -1,4 +1,4 @@
-#include "gameplay.h"
+#include "gameplay_two.h"
 
 
 #include <ctime>
@@ -6,15 +6,15 @@
 
 #include "raylib.h"
 #include "Game\game.h"
-#include "Logic\mov_dragon.h"
+#include "Logic_Two\mov_dragons_two.h"
 #include <iostream>
 using namespace std;
 
 #define MUSIC_ON
 namespace Game
 {
-	Screen screen = MENU;
-	namespace Gameplay
+	//Screen screen = MENU;
+	namespace Gameplay_two
 	{
 
 		enum Direction
@@ -117,10 +117,13 @@ namespace Game
 		static const float PLAYER_SPEED = 300.0f;
 		static Shoot shoot[PLAYER_MAX_SHOOTS];
 		static short int points = 0;
+		static short int points2 = 0;
 		static bool pause;
 		static const int framesSpeed = 8;
 		static int framesCounter = 0;
 		static int currentFrame = 0;
+		static int framesCounter2 = 0;
+		static int currentFrame2 = 0; 
 		static Rectangle enemi;
 		static Rectangle enemi2;
 		static Rectangle pisoenemi;
@@ -128,9 +131,11 @@ namespace Game
 		static Fondo fondo[2];
 		static Fondo piso[2];
 		static Rectangle rec;
+		static Rectangle rec2;
 		static bool animationDragonOn;
 		static bool colect = true;
 		Player player;
+		Player2 player2;
 
 		//--------------------------------------------
 
@@ -138,7 +143,7 @@ namespace Game
 		bool right = false;
 		bool firstInit = true;
 		//--------------------------------------------
-		void initGame() {
+		void initGameTwo() {
 			for (int i = 0; i < 2; i++)
 			{
 				if (i == 0)
@@ -199,6 +204,18 @@ namespace Game
 			player.color = LIGHTGRAY;
 			player.frameRec = { 0.0f, 0.0f, (float)player.player_texture.width / 3, (float)player.player_texture.height };
 			//--------------------------------
+			player2.player2_texture = LoadTexture("res/boton_menu2.png");
+			player2.position2 = Vector2{ 200.0f, (float)screenHeight / 3 - dragonHeight / 3 };
+			player2.speed = Vector2{ 0, 0 };
+			player2.acceleration = 0;
+			player2.rotation = 0;
+			player2.sourceRec = { 0.0f,0.0f,(float)player2.player2_texture.width / 3,(float)player2.player2_texture.height };
+			player2.destRec = { player2.position2.x,player2.position2.y,(float)player2.player2_texture.width / 3,(float)player2.player2_texture.height };
+			player2.origin = { (float)player2.player2_texture.width / 3,(float)player2.player2_texture.height / 3 };
+			player2.collider = Vector3{ player2.position2.x + sin(player2.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), player2.position2.y - cos(player2.rotation*DEG2RAD)*(dragonHeight / 3 / 2.5f), 12 };
+			player2.color = LIGHTGRAY;
+			player2.frameRec = { 0.0f, 0.0f, (float)player2.player2_texture.width / 3, (float)player2.player2_texture.height };
+			//--------------------------------
 			initEnemi(_enemi);
 			menu = LoadTexture("res/boton_menu.png");
 			negativeMenu = LoadTexture("res/boton_menu2.png");
@@ -214,13 +231,39 @@ namespace Game
 		}
 
 
-		void updateGame()
+		void updateGameTwo()
 		{
 			if (!pause)
 			{
 				if (player.position.x >  _enemi[0].position.x && colect)
 				{
 					points++;
+					colect = !colect;
+#ifdef MUSIC_ON
+					if (music)
+					{
+						randomMusic = GetRandomValue(1, 4);
+						switch (randomMusic) {
+						case 1:
+							PlaySound(fxWav);
+							break;
+						case 2:
+							PlaySound(fxWav2);
+							break;
+						case 3:
+							PlaySound(fxWav3);
+							break;
+						case 4:
+							PlaySound(fxWav4);
+							break;
+						}
+
+					}
+#endif					
+				}
+				if (player2.position2.x >  _enemi[0].position.x && colect)
+				{
+					points2++;
 					colect = !colect;
 #ifdef MUSIC_ON
 					if (music)
@@ -293,6 +336,14 @@ namespace Game
 					}
 
 				}
+				for (int i = 0; i < 2; i++)
+				{
+					if (CheckCollisionRecs(rec2, pisoenemi) || CheckCollisionRecs(rec2, piso2))
+					{
+						defeat();
+					}
+
+				}
 				for (int i = 0; i < TOTAL_ENEMI; i++)
 				{
 					if (i == 1)
@@ -306,6 +357,7 @@ namespace Game
 				}
 
 				rec = { (float)player.position.x - (float)player.player_texture.width / 3 / 2,(float)player.position.y - (float)player.player_texture.height, (float)player.player_texture.width / 3, (float)player.player_texture.height };
+				rec = { (float)player2.position2.x - (float)player2.player2_texture.width / 3 / 2,(float)player2.position2.y - (float)player2.player2_texture.height, (float)player2.player2_texture.width / 3, (float)player2.player2_texture.height };
 
 				if (CheckCollisionPointRec(GetMousePosition(), recPause))
 				{
@@ -321,7 +373,7 @@ namespace Game
 				}
 				victory();
 				SetExitKey(0);
-				Logic_dragon::mov_dragon();
+				Logic_dragon_Two::mov_dragon_two();
 				if (IsKeyDown(KEY_M))
 				{
 					pause = !pause;
@@ -380,11 +432,45 @@ namespace Game
 						animationDragonOn = false;
 					}
 				}
+				if (IsKeyDown(KEY_SPACE))
+				{
+					if (!animationDragonOn)
+					{
+						animationDragonOn = true;
+						framesCounter2 += 1;
+
+						if (framesCounter2*GetFrameTime() >= (1 / framesSpeed))
+						{
+							currentFrame2++;
+
+							if (currentFrame2 > 1) currentFrame2 = 1;
+
+							player2.frameRec.x = (float)currentFrame2*(float)player2.player2_texture.width / 3;
+						}
+					}
+
+				}
+				else
+				{
+					time += 1 * GetFrameTime();
+					if (time > 0.5f) {
+						time = 0;
+						if (framesCounter2*GetFrameTime() >= (1 / framesSpeed))
+						{
+							framesCounter2 = 0;
+							currentFrame2 = 0;
+							player2.frameRec.x = (float)currentFrame*(float)player2.player2_texture.width / 3;
+						}
+						animationDragonOn = false;
+					}
+				}
 				for (int i = 0; i < TOTAL_ENEMI; i++)
 				{
 					_enemi[i].destRec = { _enemi[i].x,_enemi[i].y,(float)_enemi[0].tube_texture.width,(float)_enemi[0].tube_texture.height };
 				}
 				player.destRec = { player.position.x,player.position.y,(float)player.player_texture.width / 3,(float)player.player_texture.height };
+				player2.destRec = { player2.position2.x,player2.position2.y,(float)player2.player2_texture.width / 3,(float)player2.player2_texture.height };
+
 			}
 			else
 			{
@@ -394,8 +480,11 @@ namespace Game
 					{
 						initEnemi(_enemi);
 						points = INIT_SCORE;
+						points2 = INIT_SCORE;
 						player.position = Vector2{ (float)halfScreenWidth, (float)screenHeight / 2 - dragonHeight / 2 };
+						player2.position2 = Vector2{ (float)halfScreenWidth, (float)screenHeight / 2 - dragonHeight / 2 };
 						player.rotation = 0;
+						player2.rotation = 0;
 						pause = !pause;
 						screen = MENU;
 					}
@@ -420,7 +509,7 @@ namespace Game
 				}
 			}
 		}
-		void DrawGame()
+		void DrawGameTwo()
 		{
 
 			for (int i = 0; i < 2; i++)
@@ -429,12 +518,19 @@ namespace Game
 			}
 			//DrawTextureRec(player.player_texture, , player.position, WHITE);
 			DrawTexturePro(player.player_texture, player.frameRec, player.destRec, player.origin, player.rotation, WHITE);
+			DrawTexturePro(player2.player2_texture, player2.frameRec, player2.destRec, player2.origin, player2.rotation, WHITE);
+
 			drawEnemi(_enemi);
 			for (int i = 0; i < PLAYER_MAX_SHOOTS; i++)
 			{
 				if (shoot[i].active) DrawCircleV(shoot[i].position, shoot[i].radius, BLACK);
 			}
 
+			DrawText(FormatText("%01i", points), (halfScreenWidth)-20, screenHeight / 20, 30, LIGHTGRAY);
+			for (int i = 0; i < 2; i++)
+			{
+				DrawTexture(piso[0].fond, piso[i].position.x, piso[i].position.y, WHITE);
+			}
 			DrawText(FormatText("%01i", points), (halfScreenWidth)-20, screenHeight / 20, 30, LIGHTGRAY);
 			for (int i = 0; i < 2; i++)
 			{
@@ -544,6 +640,16 @@ namespace Game
 				}
 
 			}
+
+			for (int i = 0; i < TOTAL_ENEMI; i++)
+			{
+				if (CheckCollisionRecs(rec2, enemi) || CheckCollisionRecs(rec2, enemi2))
+				{
+					instanceThisEnemi(_enemi, i);
+					defeat();
+				}
+
+			}
 		}
 		static void movEnemi(Enemi _enemi[])
 		{
@@ -577,8 +683,11 @@ namespace Game
 				screen = WIN;
 				initEnemi(_enemi);
 				points = INIT_SCORE;
+				points2 = INIT_SCORE; 
 				player.position = Vector2{ 200.0f, (float)screenHeight / 3 - dragonHeight / 3 };
+				player2.position2 = Vector2{ 200.0f, (float)screenHeight / 3 - dragonHeight / 3 };
 				player.rotation = 0;
+				player2.rotation = 0;
 				colect = true;
 			}
 		}
@@ -589,8 +698,12 @@ namespace Game
 			points = INIT_SCORE;
 			player.position = Vector2{ 200.0f, (float)screenHeight / 3 - dragonHeight / 3 };
 			player.rotation = 0;
+			points2 = INIT_SCORE;
+			player2.position2 = Vector2{ 200.0f, (float)screenHeight / 3 - dragonHeight / 3 };
+			player2.rotation = 0;
 			colect = true;
 		}
 	}
 
 }
+

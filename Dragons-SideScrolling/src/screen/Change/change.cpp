@@ -43,7 +43,7 @@ namespace Game
 
 				if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 				{
-					//screen = credits;
+					screen = GAMETWO;
 				}
 			}
 			
@@ -61,8 +61,8 @@ namespace Game
 			DrawRectangle(rec1.x, rec1.y, rec1.width, rec1.height, BLACK);
 			DrawRectangle(rec2.x, rec2.y, rec2.width, rec2.height, BLACK);
 
-			DrawText("jugar", rec1.x + 18, rec1.y + 10, 18, WHITE);
-			DrawText("Creditos", rec2.x + 5, rec2.y + 10, 18, WHITE);
+			DrawText("One player", rec1.x + 18, rec1.y + 10, 18, WHITE);
+			DrawText("Two players", rec2.x + 5, rec2.y + 10, 18, WHITE);
 			
 			EndDrawing();
 		}

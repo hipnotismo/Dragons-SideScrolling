@@ -8,6 +8,7 @@
 #include "screen\Credits\credits.h"
 #include "screen\Defeat\defeat.h"
 #include"screen/Change/change.h"
+#include"screen/GameplayTwo/gameplay_two.h"
 //#define MUSIC_ON
 namespace Game
 {
@@ -67,6 +68,16 @@ namespace Game
 		case CHANGE:
 			initChange::UpdateChange();
 			break;
+		case GAMETWO:
+			if (Gameplay_two::firstInit)
+			{
+
+
+				Gameplay_two::initGameTwo();
+				Gameplay_two::firstInit = false;
+			}
+			Gameplay_two::updateGameTwo();
+			break;
 		default:
 			break;
 		}
@@ -94,6 +105,9 @@ namespace Game
 			break;
 		case CHANGE:
 			initChange::DrawChange();
+			break;
+		case GAMETWO:
+			Gameplay_two::DrawGameTwo();
 			break;
 		}
 		EndDrawing();
